@@ -11,7 +11,8 @@ let myHand = [];
 const screens = {
   home: document.getElementById('home-screen'),
   lobby: document.getElementById('lobby-screen'),
-  game: document.getElementById('game-screen')
+  game: document.getElementById('game-screen'),
+  preview: document.getElementById('preview-screen')
 };
 
 // 首页元素
@@ -880,3 +881,116 @@ document.addEventListener('touchend', (e) => {
   }
   lastTouchEnd = now;
 }, false);
+
+// ==================== 游戏预览功能 ====================
+
+// 预览用的卡牌规则数据
+const previewCardRules = {
+  'A': { name: '点杀', rule: '指定任意一人喝酒', icon: '🎯', type: 'instant' },
+  '2': { name: '小姐牌', rule: '在下一个小姐出现之前陪酒，并说"大爷您喝好"', icon: '👸', type: 'hold' },
+  '3': { name: '逛三园', rule: '说"动物园/水果园/蔬菜园里有什么"，轮流说，说不出或重复的人喝', icon: '🦁', type: 'instant' },
+  '4': { name: '找人PK', rule: '选一人进行猜拳或其他PK，输的人喝酒', icon: '⚔️', type: 'instant' },
+  '5': { name: '照相机', rule: '随时可喊"照相机"，此时动的人喝酒（保留在手中直到发动）', icon: '📷', type: 'hold' },
+  '6': { name: '摸鼻子', rule: '随时可摸鼻子，最后一个摸的人喝酒（保留在手中直到发动）', icon: '👃', type: 'hold' },
+  '7': { name: '逢7过', rule: '从1开始报数，逢7、7的倍数、含7的数字要拍手跳过，错的人喝', icon: '7️⃣', type: 'instant' },
+  '8': { name: '厕所牌', rule: '拥有此牌才能上厕所，可转让给他人（跨回合保留）', icon: '🚽', type: 'hold' },
+  '9': { name: '自己喝', rule: '抽到此牌的人自己喝一杯', icon: '🍺', type: 'instant' },
+  '10': { name: '神经病', rule: '所有人不能和你对话，否则喝酒（保留直到有人中招）', icon: '🤪', type: 'hold' },
+  'J': { name: '上家喝', rule: '你的上家（上一个抽牌的人）喝酒', icon: '⬆️', type: 'instant' },
+  'Q': { name: '下家喝', rule: '你的下家（下一个抽牌的人）喝酒', icon: '⬇️', type: 'instant' },
+  'K': { name: '定K规则', rule: '定义下一个抽到K的人要做什么（4个K抽完本轮结束）', icon: '👑', type: 'instant' }
+};
+
+const previewSuits = ['♠', '♥', '♦', '♣'];
+const previewValues = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+// 预览界面元素
+const previewBtn = document.getElementById('preview-btn');
+const exitPreviewBtn = document.getElementById('exit-preview-btn');
+const previewCard = document.getElementById('preview-card');
+const previewRuleName = document.getElementById('preview-rule-name');
+const previewRuleDesc = document.getElementById('preview-rule-desc');
+const previewDrawBtn = document.getElementById('preview-draw-btn');
+const previewStartBtn = document.getElementById('preview-start-btn');
+const previewCardItems = document.querySelectorAll('.preview-card-item');
+
+// 显示预览卡牌
+function showPreviewCard(value, suit = null) {
+  const rule = previewCardRules[value];
+  if (!suit) {
+    suit = previewSuits[Math.floor(Math.random() * previewSuits.length)];
+  }
+  
+  const isRed = suit === '♥' || suit === '♦';
+  previewCard.className = `card ${isRed ? 'card-red' : 'card-black'}`;
+  previewCard.innerHTML = `
+    <span class="card-corner top-left">${suit}${value}</span>
+    <span class="card-center">${suit}</span>
+    <span class="card-corner bottom-right">${suit}${value}</span>
+  `;
+  
+  // 添加翻转动画
+  previewCard.classList.add('card-flip');
+  setTimeout(() => previewCard.classList.remove('card-flip'), 300);
+  
+  // 显示规则
+  previewRuleName.textContent = `${rule.icon} ${value} - ${rule.name}`;
+  previewRuleDesc.textContent = rule.rule;
+  
+  // 高亮当前选中的卡牌项
+  previewCardItems.forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.value === value) {
+      item.classList.add('active');
+    }
+  });
+  
+  // 根据类型添加标记
+  const typeLabel = rule.type === 'hold' ? ' (保留手牌)' : '';
+  previewRuleDesc.textContent = rule.rule + typeLabel;
+}
+
+// 随机抽一张牌
+function previewRandomDraw() {
+  const value = previewValues[Math.floor(Math.random() * previewValues.length)];
+  const suit = previewSuits[Math.floor(Math.random() * previewSuits.length)];
+  showPreviewCard(value, suit);
+}
+
+// 进入预览模式
+if (previewBtn) {
+  previewBtn.addEventListener('click', () => {
+    showScreen('preview');
+    // 默认显示 A
+    showPreviewCard('A');
+  });
+}
+
+// 退出预览模式
+if (exitPreviewBtn) {
+  exitPreviewBtn.addEventListener('click', () => {
+    showScreen('home');
+  });
+}
+
+// 随机抽牌按钮
+if (previewDrawBtn) {
+  previewDrawBtn.addEventListener('click', () => {
+    previewRandomDraw();
+  });
+}
+
+// 点击卡牌项查看规则
+previewCardItems.forEach(item => {
+  item.addEventListener('click', () => {
+    showPreviewCard(item.dataset.value);
+  });
+});
+
+// 预览界面的开始游戏按钮
+if (previewStartBtn) {
+  previewStartBtn.addEventListener('click', () => {
+    showScreen('home');
+    playerNameInput.focus();
+  });
+}
