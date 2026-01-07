@@ -1,0 +1,18 @@
+{
+  "name": "party-card-game",
+  "version": "1.0.0",
+  "description": "在线抽牌喝酒游戏 - 小姐牌",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "uuid": "^9.0.0"
+  },
+  "keywords": ["party", "game", "cards", "drinking"],
+  "author": "",
+  "license": "MIT"
+}
