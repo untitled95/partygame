@@ -574,32 +574,28 @@ io.on('connection', (socket) => {
       return;
     }
     
-    // 收集所有牌（除了厕所牌需要特殊处理）
-    let allCards = [...room.discardPile];
+    // 收集所有牌：牌堆剩余 + 弃牌堆
+    let allCards = [...room.deck, ...room.discardPile];
+    room.deck = [];
     room.discardPile = [];
     
+    // 处理玩家手牌
     room.players.forEach(p => {
-      // 分离厕所牌和其他手牌
-      const toiletCards = p.hand.filter(c => c.value === '8');
-      const otherCards = p.hand.filter(c => c.value !== '8');
+      const remainingHand = [];
       
-      // 其他手牌放回牌堆
-      allCards = allCards.concat(otherCards);
-      
-      // 处理厕所牌
-      const remainingToiletCards = [];
-      toiletCards.forEach(tc => {
-        if (tc.toiletRoundsLeft !== undefined && tc.toiletRoundsLeft > 1) {
-          tc.toiletRoundsLeft--;
-          remainingToiletCards.push(tc);
+      p.hand.forEach(card => {
+        if (card.value === '8' && card.toiletRoundsLeft !== undefined && card.toiletRoundsLeft > 1) {
+          // 厕所牌还有回合，保留在手中并减少回合数
+          card.toiletRoundsLeft--;
+          remainingHand.push(card);
         } else {
-          // 厕所牌回合用完，放回牌堆
-          allCards.push(tc);
+          // 其他所有牌（包括过期的厕所牌）放回牌堆
+          allCards.push(card);
         }
       });
       
-      // 更新手牌（只保留还有回合的厕所牌）
-      p.hand = remainingToiletCards;
+      // 更新手牌
+      p.hand = remainingHand;
     });
     
     room.deck = shuffleDeck(allCards);
