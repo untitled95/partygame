@@ -3,265 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🍻 在线抽牌喝酒游戏</title>
-  <link rel="stylesheet" href="style.css">
+  <title>🎮 派对游戏合集</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #e74c3c;
+      --secondary-color: #3498db;
+      --background-dark: #1a1a2e;
+      --background-light: #16213e;
+      --text-color: #ffffff;
+      --text-muted: #a0a0a0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--background-dark) 0%, var(--background-light) 100%);
+      color: var(--text-color);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .game-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 25px 20px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-color);
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--primary-color);
+      box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+    }
+
+    .game-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .game-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .game-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .game-card.coming-soon {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .game-card.coming-soon::after {
+      content: '即将推出';
+      display: block;
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <!-- 首页 - 创建/加入房间 -->
-    <div id="home-screen" class="screen active">
-      <div class="container">
-        <h1 class="title">🍻 在线抽牌喝酒游戏</h1>
-        <p class="subtitle">在线抽牌喝酒游戏</p>
-        
-        <div class="input-group">
-          <input type="text" id="player-name" placeholder="输入你的昵称" maxlength="10">
-        </div>
-        
-        <div class="button-group">
-          <button id="create-room-btn" class="btn btn-primary">创建房间</button>
-          <button id="join-room-btn" class="btn btn-secondary">加入房间</button>
-        </div>
-        
-        <div id="join-room-form" class="hidden">
-          <div class="input-group">
-            <input type="text" id="room-code" placeholder="输入房间号" maxlength="6">
-          </div>
-          <button id="confirm-join-btn" class="btn btn-primary">确认加入</button>
-        </div>
-        
-        <div class="preview-section">
-          <p class="preview-hint">第一次玩？先看看游戏是什么样的</p>
-          <button id="preview-btn" class="btn btn-preview">👀 预览游戏</button>
-        </div>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">🎮 派对游戏合集</h1>
+      <p class="subtitle">和朋友一起玩的线上小游戏</p>
+    </header>
+
+    <div class="games-grid">
+      <a href="/drinkinggame/" class="game-card">
+        <span class="game-icon">🍻</span>
+        <div class="game-name">抽牌喝酒</div>
+        <div class="game-desc">经典小姐牌，多人在线抽牌</div>
+      </a>
+
+      <div class="game-card coming-soon">
+        <span class="game-icon">🕵️</span>
+        <div class="game-name">谁是卧底</div>
+        <div class="game-desc">猜词游戏，找出卧底</div>
+      </div>
+
+      <div class="game-card coming-soon">
+        <span class="game-icon">🐺</span>
+        <div class="game-name">狼人杀</div>
+        <div class="game-desc">经典身份推理游戏</div>
+      </div>
+
+      <div class="game-card coming-soon">
+        <span class="game-icon">🎨</span>
+        <div class="game-name">你画我猜</div>
+        <div class="game-desc">一人画，大家猜</div>
+      </div>
+
+      <div class="game-card coming-soon">
+        <span class="game-icon">🎲</span>
+        <div class="game-name">骰子游戏</div>
+        <div class="game-desc">摇骰子比大小</div>
+      </div>
+
+      <div class="game-card coming-soon">
+        <span class="game-icon">❓</span>
+        <div class="game-name">真心话大冒险</div>
+        <div class="game-desc">随机抽题，刺激有趣</div>
       </div>
     </div>
-    
-    <!-- 游戏预览界面 -->
-    <div id="preview-screen" class="screen">
-      <button id="exit-preview-btn" class="preview-back-btn">×</button>
-      
-      <div class="preview-container">
-        <!-- 预览卡牌区域 -->
-        <div class="preview-card-area">
-          <div id="preview-card" class="card">
-            <span class="card-suit"></span>
-            <span class="card-value"></span>
-          </div>
-          <div id="preview-rule" class="card-rule">
-            <h3 id="preview-rule-name">点击下方卡牌</h3>
-            <p id="preview-rule-desc">选择一张牌查看规则</p>
-          </div>
-        </div>
-        
-        <!-- 所有牌规则列表 -->
-        <div class="preview-cards-grid">
-          <div class="preview-card-item" data-value="A">A</div>
-          <div class="preview-card-item" data-value="2">2</div>
-          <div class="preview-card-item" data-value="3">3</div>
-          <div class="preview-card-item" data-value="4">4</div>
-          <div class="preview-card-item" data-value="5">5</div>
-          <div class="preview-card-item" data-value="6">6</div>
-          <div class="preview-card-item" data-value="7">7</div>
-          <div class="preview-card-item" data-value="8">8</div>
-          <div class="preview-card-item" data-value="9">9</div>
-          <div class="preview-card-item" data-value="10">10</div>
-          <div class="preview-card-item" data-value="J">J</div>
-          <div class="preview-card-item" data-value="Q">Q</div>
-          <div class="preview-card-item" data-value="K">K</div>
-        </div>
-        
-        <!-- 牌型说明 -->
-        <div class="preview-legend">
-          <div class="legend-item">
-            <span class="legend-dot hold"></span>
-            <span>保留手牌</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-dot instant"></span>
-            <span>即时生效</span>
-          </div>
-          <button id="preview-draw-btn" class="btn-random-draw">🎴 随机抽牌</button>
-        </div>
-        
-        <!-- CTA区域 -->
-        <div class="preview-cta">
-          <p>觉得有趣？邀请朋友一起玩吧！</p>
-          <button id="preview-start-btn" class="btn btn-primary btn-cta">🎉 开始游戏</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 等待室 -->
-    <div id="lobby-screen" class="screen">
-      <div class="container">
-        <div class="room-header">
-          <h2>房间号: <span id="room-id-display"></span></h2>
-          <button id="copy-room-id" class="btn btn-small">复制</button>
-        </div>
-        
-        <div class="players-section">
-          <h3>玩家列表 (<span id="player-count">0</span>/10)</h3>
-          <ul id="players-list"></ul>
-        </div>
-        
-        <div id="host-controls" class="hidden">
-          <button id="start-game-btn" class="btn btn-primary btn-large">开始游戏</button>
-        </div>
-        
-        <p id="waiting-message" class="info-text">等待房主开始游戏...</p>
-      </div>
-    </div>
-    
-    <!-- 游戏界面 -->
-    <div id="game-screen" class="screen">
-      <div class="game-header">
-        <div class="room-info">
-          <span>房间: <span id="game-room-id"></span></span>
-          <span>第<span id="round-number">1</span>轮</span>
-          <span>剩余: <span id="deck-remaining">52</span>张</span>
-        </div>
-        <div class="game-status">
-          <span id="kings-count">👑 0/4</span>
-        </div>
-      </div>
-      
-      <!-- 特殊状态显示 -->
-      <div id="special-status" class="special-status">
-        <div id="miss-holders" class="status-item hidden">
-          <span class="status-icon">👸</span>
-          <span class="status-text">小姐: <span class="holder-names"></span></span>
-        </div>
-        <div id="crazy-holders" class="status-item hidden">
-          <span class="status-icon">🤪</span>
-          <span class="status-text">神经病: <span class="holder-names"></span></span>
-        </div>
-        <div id="k-rule" class="status-item hidden">
-          <span class="status-icon">👑</span>
-          <span class="status-text">K规则: <span class="rule-text"></span></span>
-        </div>
-      </div>
-      
-      <div class="game-area">
-        <!-- 当前抽到的牌 -->
-        <div id="current-card-area">
-          <div id="card-display" class="card card-back">
-            <span class="card-text">?</span>
-          </div>
-          <div id="card-rule" class="card-rule hidden">
-            <h3 id="rule-name"></h3>
-            <p id="rule-description"></p>
-          </div>
-        </div>
-        
-        <!-- 抽牌信息 -->
-        <div id="draw-info">
-          <p id="current-turn">等待开始...</p>
-          <p id="last-draw"></p>
-          <p id="action-message" class="action-message"></p>
-        </div>
-        
-        <!-- 抽牌按钮 -->
-        <button id="draw-card-btn" class="btn btn-draw" disabled>抽牌</button>
-        
-        <!-- K规则输入（抽到K时显示） -->
-        <div id="k-rule-input" class="k-rule-input hidden">
-          <input type="text" id="k-rule-text" placeholder="输入下一个K的惩罚规则" maxlength="50">
-          <button id="set-k-rule-btn" class="btn btn-primary">确定</button>
-        </div>
-      </div>
-      
-      <!-- 我的手牌 -->
-      <div id="my-hand" class="my-hand">
-        <h4>我的手牌</h4>
-        <div id="hand-cards" class="hand-cards"></div>
-      </div>
-      
-      <!-- 底部控制栏 -->
-      <div class="game-footer">
-        <div class="players-bar">
-          <div id="game-players-list"></div>
-        </div>
-        <div id="host-game-controls" class="hidden">
-          <button id="shuffle-btn" class="btn btn-secondary">新一轮</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 规则弹窗 -->
-    <div id="rules-modal" class="modal hidden">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2>游戏规则</h2>
-        <div class="rules-list">
-          <div class="rule-item"><strong>A - 点杀🎯</strong>: 指定任意一人喝酒</div>
-          <div class="rule-item"><strong>2 - 小姐牌👸</strong>: 在下一个小姐出现之前陪酒并说"大爷您喝好"（保留手中）</div>
-          <div class="rule-item"><strong>3 - 逛三园🦁</strong>: 动物园/水果园/蔬菜园里有什么，轮流说</div>
-          <div class="rule-item"><strong>4 - 找人PK⚔️</strong>: 选一人PK，输的喝酒</div>
-          <div class="rule-item"><strong>5 - 照相机📷</strong>: 随时喊"照相机"，动的人喝（保留手中）</div>
-          <div class="rule-item"><strong>6 - 摸鼻子👃</strong>: 随时摸鼻子，最后一个摸的喝（保留手中）</div>
-          <div class="rule-item"><strong>7 - 逢7过7️⃣</strong>: 报数，逢7、7倍数、含7要拍手跳过</div>
-          <div class="rule-item"><strong>8 - 厕所牌🚽</strong>: 拥有才能上厕所，可转让（跨轮保留）</div>
-          <div class="rule-item"><strong>9 - 自己喝🍺</strong>: 抽到自己喝一杯</div>
-          <div class="rule-item"><strong>10 - 神经病🤪</strong>: 所有人不能和你对话（保留手中）</div>
-          <div class="rule-item"><strong>J - 上家喝⬆️</strong>: 上一个抽牌的人喝酒</div>
-          <div class="rule-item"><strong>Q - 下家喝⬇️</strong>: 下一个抽牌的人喝酒</div>
-          <div class="rule-item"><strong>K - 定K规则👑</strong>: 定义下一个K的惩罚，4个K抽完本轮结束</div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 选择玩家弹窗 -->
-    <div id="player-select-modal" class="modal hidden">
-      <div class="modal-content">
-        <span class="close-player-select">&times;</span>
-        <h2 id="player-select-title">选择玩家</h2>
-        <div id="player-select-list" class="player-select-list"></div>
-      </div>
-    </div>
-    
-    <!-- 自定义确认弹窗 -->
-    <div id="confirm-modal" class="modal hidden">
-      <div class="modal-content confirm-modal-content">
-        <div class="confirm-icon" id="confirm-icon">❓</div>
-        <h2 id="confirm-title">确认</h2>
-        <p id="confirm-message">确定要执行此操作吗？</p>
-        <div class="confirm-buttons">
-          <button id="confirm-cancel-btn" class="btn btn-secondary">取消</button>
-          <button id="confirm-ok-btn" class="btn btn-primary">确定</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 自定义提示弹窗 -->
-    <div id="alert-modal" class="modal hidden">
-      <div class="modal-content alert-modal-content">
-        <div class="alert-icon" id="alert-icon">💡</div>
-        <h2 id="alert-title">提示</h2>
-        <p id="alert-message">这是一条提示消息</p>
-        <div class="alert-buttons">
-          <button id="alert-ok-btn" class="btn btn-primary">知道了</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 自定义选项弹窗 -->
-    <div id="options-modal" class="modal hidden">
-      <div class="modal-content options-modal-content">
-        <div class="options-icon" id="options-icon">🎯</div>
-        <h2 id="options-title">选择操作</h2>
-        <p id="options-message">请选择一个选项</p>
-        <div id="options-buttons" class="options-buttons"></div>
-      </div>
-    </div>
-    
-    <!-- Toast 消息 -->
-    <div id="toast" class="toast hidden"></div>
+
+    <footer class="footer">
+      <p>© 2026 Party Games | <a href="https://github.com/untitled95/partygame" target="_blank">GitHub</a></p>
+    </footer>
   </div>
-  
-  <button id="rules-btn" class="rules-float-btn">📜</button>
-  
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="game.js"></script>
 </body>
 </html>
