@@ -1,0 +1,11 @@
+{
+  "name": "派对游戏合集",
+  "short_name": "Party Games",
+  "description": "多人联机 + 单人休闲小游戏合集",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#fff7ed"
+}

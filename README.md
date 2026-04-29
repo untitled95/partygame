@@ -10,6 +10,7 @@
 - ⚡ Socket.IO 实时同步游戏状态
 - 🎮 14 个可玩的派对小游戏
 - 🧩 单人小游戏无需创建房间，打开即可玩
+- 📴 支持单人游戏离线缓存，首次访问后断网也能继续打开
 - 🐳 支持 Docker / PM2 部署
 
 ## 🕹️ 已支持游戏
@@ -61,6 +62,7 @@ pm2 start ecosystem.config.js
 - **前端**: HTML5 + CSS3 + JavaScript
 - **实时通信**: WebSocket
 - **状态存储**: 多人游戏使用服务器内存 Map（重启后房间状态会清空），单人游戏使用浏览器本地状态/LocalStorage
+- **离线缓存**: Service Worker 预缓存大厅和单人游戏资源；适用于 `localhost` 和 HTTPS 环境
 
 ## 📁 项目结构
 
