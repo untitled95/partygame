@@ -11,9 +11,10 @@
   <div class="screen active">
     <div class="container solo-card">
       <h1 class="title">🧠 记忆翻牌</h1>
-      <p class="subtitle">找出所有相同图案的牌</p>
+      <p class="subtitle">逐关挑战，找出所有相同图案的牌</p>
 
       <div class="solo-stats">
+        <div class="solo-stat"><span class="label">关卡</span><span id="level" class="value">1/5</span></div>
         <div class="solo-stat"><span class="label">步数</span><span id="moves" class="value">0</span></div>
         <div class="solo-stat"><span class="label">时间</span><span id="timer" class="value">0s</span></div>
         <div class="solo-stat"><span class="label">配对</span><span id="matches" class="value">0/8</span></div>
@@ -22,10 +23,11 @@
       <div id="memory-board" class="memory-board" aria-label="记忆翻牌棋盘"></div>
 
       <div class="actions">
-        <button id="new-game-btn" class="btn btn-primary">重新开始</button>
+        <button id="new-game-btn" class="btn btn-primary">重玩本关</button>
+        <button id="next-level-btn" class="btn btn-success" disabled>下一关</button>
         <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
       </div>
-      <p id="message" class="muted">点击两张牌，配对成功后会保留。</p>
+      <p id="message" class="muted">点击两张牌，配对成功后会保留；通关后进入下一关。</p>
     </div>
   </div>
   <script src="game.js"></script>

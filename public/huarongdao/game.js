@@ -9,16 +9,16 @@ const resetBtn = document.getElementById('reset-btn');
 const undoBtn = document.getElementById('undo-btn');
 
 const initialPieces = [
-  { id: 'zhangfei', name: '张飞', type: 'general', row: 0, col: 0, width: 1, height: 2 },
-  { id: 'cao', name: '曹操', type: 'cao', row: 0, col: 1, width: 2, height: 2 },
-  { id: 'zhaoyun', name: '赵云', type: 'general', row: 0, col: 3, width: 1, height: 2 },
-  { id: 'machao', name: '马超', type: 'general', row: 2, col: 0, width: 1, height: 2 },
-  { id: 'guanyu', name: '关羽', type: 'horizontal', row: 2, col: 1, width: 2, height: 1 },
-  { id: 'huangzhong', name: '黄忠', type: 'general', row: 2, col: 3, width: 1, height: 2 },
-  { id: 'soldier1', name: '兵', type: 'soldier', row: 3, col: 1, width: 1, height: 1 },
-  { id: 'soldier2', name: '兵', type: 'soldier', row: 3, col: 2, width: 1, height: 1 },
-  { id: 'soldier3', name: '兵', type: 'soldier', row: 4, col: 0, width: 1, height: 1 },
-  { id: 'soldier4', name: '兵', type: 'soldier', row: 4, col: 3, width: 1, height: 1 }
+  { id: 'zhangfei', name: '张飞', meme: '震惊猫', face: '🙀', caption: '啊?', type: 'general', row: 0, col: 0, width: 1, height: 2 },
+  { id: 'cao', name: '曹操', meme: '老板猫', face: '😼', caption: '让我出去', type: 'cao', row: 0, col: 1, width: 2, height: 2 },
+  { id: 'zhaoyun', name: '赵云', meme: '优雅猫', face: '😺', caption: '懂了', type: 'general', row: 0, col: 3, width: 1, height: 2 },
+  { id: 'machao', name: '马超', meme: '困困猫', face: '😿', caption: '想睡', type: 'general', row: 2, col: 0, width: 1, height: 2 },
+  { id: 'guanyu', name: '关羽', meme: '躺平猫', face: '😸', caption: '先躺会', type: 'horizontal', row: 2, col: 1, width: 2, height: 1 },
+  { id: 'huangzhong', name: '黄忠', meme: '干饭猫', face: '😹', caption: '开饭!', type: 'general', row: 2, col: 3, width: 1, height: 2 },
+  { id: 'soldier1', name: '兵', meme: '盯盯猫', face: '🐱', caption: '盯', type: 'soldier', row: 3, col: 1, width: 1, height: 1 },
+  { id: 'soldier2', name: '兵', meme: '摸鱼猫', face: '🐈', caption: '摸鱼', type: 'soldier', row: 3, col: 2, width: 1, height: 1 },
+  { id: 'soldier3', name: '兵', meme: '加班猫', face: '🐈‍⬛', caption: '救命', type: 'soldier', row: 4, col: 0, width: 1, height: 1 },
+  { id: 'soldier4', name: '兵', meme: '吃瓜猫', face: '😽', caption: '吃瓜', type: 'soldier', row: 4, col: 3, width: 1, height: 1 }
 ];
 
 const directions = {
@@ -99,7 +99,7 @@ function checkWin() {
   won = true;
   updateBestMoves();
   statusEl.textContent = '胜利';
-  messageEl.textContent = `曹操成功突围！共用了 ${moves} 步。`;
+  messageEl.textContent = `老板猫成功突围！共用了 ${moves} 步。`;
 }
 
 function render() {
@@ -124,8 +124,12 @@ function render() {
           class="${classes.join(' ')}"
           data-id="${piece.id}"
           style="left: calc(${left}% + 4px); top: calc(${top}% + 4px); width: calc(${width}% - 8px); height: calc(${height}% - 8px);"
-          aria-label="${piece.name}"
-        >${piece.name}</button>
+          aria-label="${piece.meme}，原棋子${piece.name}"
+        >
+          <span class="cat-face">${piece.face}</span>
+          <span class="cat-meme-name">${piece.meme}</span>
+          <span class="cat-caption">${piece.caption}</span>
+        </button>
       `;
     }).join('')}
   `;
@@ -135,7 +139,7 @@ function selectPiece(id) {
   const piece = pieces.find(item => item.id === id);
   if (!piece) return;
   selectedId = id;
-  messageEl.textContent = `已选中 ${piece.name}。`;
+  messageEl.textContent = `已选中 ${piece.meme}。`;
   render();
 }
 
@@ -148,7 +152,7 @@ function moveSelected(direction) {
   }
 
   if (!canMove(piece, direction)) {
-    messageEl.textContent = `${piece.name} 不能向${directions[direction].label}移动。`;
+    messageEl.textContent = `${piece.meme} 不能向${directions[direction].label}移动。`;
     return;
   }
 
@@ -161,7 +165,7 @@ function moveSelected(direction) {
   piece.row += directions[direction].row;
   piece.col += directions[direction].col;
   moves++;
-  messageEl.textContent = `${piece.name} 向${directions[direction].label}移动。`;
+  messageEl.textContent = `${piece.meme} 向${directions[direction].label}移动。`;
   checkWin();
   render();
 }
@@ -172,7 +176,7 @@ function resetGame() {
   moves = 0;
   won = false;
   history = [];
-  messageEl.textContent = '先点选一个棋子，再用方向按钮、键盘方向键或滑动棋子移动。';
+  messageEl.textContent = '先点选一只猫，再用方向按钮、键盘方向键或滑动猫猫移动。';
   render();
 }
 

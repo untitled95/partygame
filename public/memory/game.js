@@ -1,10 +1,20 @@
-const emojis = ['🍎', '🍌', '🍇', '🍓', '🍉', '🍒', '🥝', '🍍'];
+const emojiPool = ['🍎', '🍌', '🍇', '🍓', '🍉', '🍒', '🥝', '🍍', '🍋', '🍑', '🥥', '🥑'];
+const levels = [
+  { name: '入门', pairs: 4, columns: 4 },
+  { name: '简单', pairs: 6, columns: 4 },
+  { name: '标准', pairs: 8, columns: 4 },
+  { name: '困难', pairs: 10, columns: 4 },
+  { name: '大师', pairs: 12, columns: 4 }
+];
+
 const boardEl = document.getElementById('memory-board');
+const levelEl = document.getElementById('level');
 const movesEl = document.getElementById('moves');
 const timerEl = document.getElementById('timer');
 const matchesEl = document.getElementById('matches');
 const messageEl = document.getElementById('message');
 const newGameBtn = document.getElementById('new-game-btn');
+const nextLevelBtn = document.getElementById('next-level-btn');
 
 let cards = [];
 let firstCard = null;
@@ -14,6 +24,9 @@ let moves = 0;
 let matches = 0;
 let startTime = null;
 let timerId = null;
+let currentLevelIndex = 0;
+let levelComplete = false;
+let mismatchTimerId = null;
 
 function shuffle(items) {
   const result = [...items];
@@ -22,6 +35,10 @@ function shuffle(items) {
     [result[i], result[j]] = [result[j], result[i]];
   }
   return result;
+}
+
+function getCurrentLevel() {
+  return levels[currentLevelIndex];
 }
 
 function startTimer() {
@@ -37,7 +54,13 @@ function stopTimer() {
   timerId = null;
 }
 
-function startGame() {
+function startLevel(levelIndex = currentLevelIndex) {
+  currentLevelIndex = Math.min(Math.max(levelIndex, 0), levels.length - 1);
+  const level = getCurrentLevel();
+  const emojis = emojiPool.slice(0, level.pairs);
+
+  clearTimeout(mismatchTimerId);
+  mismatchTimerId = null;
   cards = shuffle([...emojis, ...emojis]).map((emoji, index) => ({
     id: index,
     emoji,
@@ -49,16 +72,22 @@ function startGame() {
   locked = false;
   moves = 0;
   matches = 0;
+  levelComplete = false;
   stopTimer();
   startTime = null;
   timerEl.textContent = '0s';
-  messageEl.textContent = '点击两张牌，配对成功后会保留。';
+  nextLevelBtn.disabled = true;
+  nextLevelBtn.textContent = currentLevelIndex === levels.length - 1 ? '最后一关' : '下一关';
+  messageEl.textContent = `第 ${currentLevelIndex + 1} 关：${level.name}，需要配对 ${level.pairs} 对牌。`;
   render();
 }
 
 function render() {
+  const level = getCurrentLevel();
+  boardEl.style.setProperty('--memory-columns', level.columns);
+  levelEl.textContent = `${currentLevelIndex + 1}/${levels.length}`;
   movesEl.textContent = moves;
-  matchesEl.textContent = `${matches}/${emojis.length}`;
+  matchesEl.textContent = `${matches}/${level.pairs}`;
   boardEl.innerHTML = cards.map(card => {
     const visible = card.revealed || card.matched;
     return `
@@ -70,7 +99,7 @@ function render() {
 }
 
 function revealCard(card) {
-  if (locked || card.revealed || card.matched) return;
+  if (locked || levelComplete || card.revealed || card.matched) return;
   startTimer();
 
   card.revealed = true;
@@ -94,21 +123,31 @@ function revealCard(card) {
     secondCard = null;
     locked = false;
 
-    if (matches === emojis.length) {
+    if (matches === getCurrentLevel().pairs) {
+      levelComplete = true;
       stopTimer();
-      messageEl.textContent = `完成！共 ${moves} 步，用时 ${timerEl.textContent}。`;
+      if (currentLevelIndex === levels.length - 1) {
+        messageEl.textContent = `全部通关！最后一关用了 ${moves} 步，用时 ${timerEl.textContent}。`;
+        nextLevelBtn.textContent = '已通关';
+      } else {
+        messageEl.textContent = `本关完成！共 ${moves} 步，用时 ${timerEl.textContent}，可以进入下一关。`;
+        nextLevelBtn.disabled = false;
+      }
     }
     render();
     return;
   }
 
   messageEl.textContent = '不一样，再试试。';
-  setTimeout(() => {
-    firstCard.revealed = false;
-    secondCard.revealed = false;
+  const previousFirstCard = firstCard;
+  const previousSecondCard = secondCard;
+  mismatchTimerId = setTimeout(() => {
+    previousFirstCard.revealed = false;
+    previousSecondCard.revealed = false;
     firstCard = null;
     secondCard = null;
     locked = false;
+    mismatchTimerId = null;
     render();
   }, 800);
 }
@@ -120,5 +159,9 @@ boardEl.addEventListener('click', (event) => {
   if (card) revealCard(card);
 });
 
-newGameBtn.addEventListener('click', startGame);
-startGame();
+newGameBtn.addEventListener('click', () => startLevel(currentLevelIndex));
+nextLevelBtn.addEventListener('click', () => {
+  if (!levelComplete || currentLevelIndex >= levels.length - 1) return;
+  startLevel(currentLevelIndex + 1);
+});
+startLevel();
