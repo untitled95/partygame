@@ -719,6 +719,147 @@ body {
   }
 }
 
+/* ==================== 清爽暖色主题覆盖 ==================== */
+
+:root {
+  --primary-color: #ff6b6b;
+  --secondary-color: #7c3aed;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --background-dark: #fff7ed;
+  --background-light: #eef2ff;
+  --text-color: #2f243a;
+  --text-muted: #746a82;
+  --card-red: #e11d48;
+  --card-black: #312e81;
+  --surface: rgba(255, 255, 255, 0.76);
+  --surface-strong: rgba(255, 255, 255, 0.92);
+  --surface-border: rgba(255, 255, 255, 0.72);
+  --shadow-soft: 0 18px 45px rgba(101, 76, 125, 0.13);
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 183, 77, 0.42), transparent 30%),
+    radial-gradient(circle at 88% 12%, rgba(124, 58, 237, 0.22), transparent 34%),
+    radial-gradient(circle at 50% 92%, rgba(16, 185, 129, 0.20), transparent 36%),
+    linear-gradient(135deg, #fff7ed 0%, #fdf2f8 48%, #eef2ff 100%);
+}
+
+.title {
+  background: linear-gradient(135deg, #ff6b6b, #f97316, #7c3aed);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-shadow: none;
+}
+
+.input-group input,
+.k-rule-input input {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(124, 58, 237, 0.12);
+  border-radius: 16px;
+  color: var(--text-color);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.input-group input:focus,
+.k-rule-input input:focus {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.btn {
+  border-radius: 16px;
+  box-shadow: 0 12px 26px rgba(101, 76, 125, 0.13);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b6b, #f97316);
+}
+
+.btn-secondary,
+.rules-float-btn {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+}
+
+.btn-draw {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.room-header,
+.game-header,
+.status-item,
+.card-rule,
+.my-hand,
+.player-chip,
+.modal-content,
+#preview-rule {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+#players-list,
+#players-list li,
+.hand-card,
+.rule-item,
+.player-select-item,
+.options-buttons .btn-option,
+.preview-section,
+.preview-card-item:not(.active) {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hand-card:hover,
+.player-select-item:hover,
+.options-buttons .btn-option:hover {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.card {
+  box-shadow: 0 18px 40px rgba(101, 76, 125, 0.22);
+}
+
+.card-back {
+  background: linear-gradient(135deg, #7c3aed, #ff6b6b);
+  border-color: rgba(255, 255, 255, 0.78);
+}
+
+.card-back .card-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.card-front,
+#preview-card {
+  background: linear-gradient(145deg, #ffffff, #fff7ed);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.player-chip.current,
+.preview-card-item.active {
+  background: linear-gradient(135deg, #ff6b6b, #f97316);
+  color: #fff;
+}
+
+.modal {
+  background: rgba(47, 36, 58, 0.38);
+  backdrop-filter: blur(10px);
+}
+
+.toast {
+  background: rgba(47, 36, 58, 0.9);
+}
+
+.round-end-overlay {
+  background: rgba(47, 36, 58, 0.82);
+  backdrop-filter: blur(10px);
+}
+
 /* 回合结束遮罩 */
 .round-end-overlay {
   position: fixed;
@@ -1081,4 +1222,146 @@ body {
   100% {
     transform: rotateY(0) scale(1);
   }
+}
+
+/* ==================== 清爽暖色主题覆盖 ==================== */
+
+:root {
+  --primary-color: #ff6b6b;
+  --secondary-color: #7c3aed;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --background-dark: #fff7ed;
+  --background-light: #eef2ff;
+  --text-color: #2f243a;
+  --text-muted: #746a82;
+  --card-red: #e11d48;
+  --card-black: #312e81;
+  --surface: rgba(255, 255, 255, 0.76);
+  --surface-border: rgba(255, 255, 255, 0.72);
+  --shadow-soft: 0 18px 45px rgba(101, 76, 125, 0.13);
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 183, 77, 0.42), transparent 30%),
+    radial-gradient(circle at 88% 12%, rgba(124, 58, 237, 0.22), transparent 34%),
+    radial-gradient(circle at 50% 92%, rgba(16, 185, 129, 0.20), transparent 36%),
+    linear-gradient(135deg, #fff7ed 0%, #fdf2f8 48%, #eef2ff 100%);
+}
+
+.title {
+  background: linear-gradient(135deg, #ff6b6b, #f97316, #7c3aed);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-shadow: none;
+}
+
+.input-group input,
+.k-rule-input input {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(124, 58, 237, 0.12);
+  border-radius: 16px;
+  color: var(--text-color);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.input-group input:focus,
+.k-rule-input input:focus {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.btn {
+  border-radius: 16px;
+  box-shadow: 0 12px 26px rgba(101, 76, 125, 0.13);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b6b, #f97316);
+}
+
+.btn-secondary,
+.rules-float-btn {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+}
+
+.btn-draw {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.room-header,
+.game-header,
+.status-item,
+.card-rule,
+.my-hand,
+.player-chip,
+.modal-content,
+#preview-rule {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+#players-list,
+#players-list li,
+.hand-card,
+.rule-item,
+.player-select-item,
+.options-buttons .btn-option,
+.preview-section,
+.preview-card-item:not(.active),
+.btn-random-draw {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hand-card:hover,
+.player-select-item:hover,
+.options-buttons .btn-option:hover,
+.btn-random-draw:hover {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.card {
+  box-shadow: 0 18px 40px rgba(101, 76, 125, 0.22);
+}
+
+.card-back {
+  background: linear-gradient(135deg, #7c3aed, #ff6b6b);
+  border-color: rgba(255, 255, 255, 0.78);
+}
+
+.card-back .card-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.card-front,
+#preview-card {
+  background: linear-gradient(145deg, #ffffff, #fff7ed);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.player-chip.current,
+.preview-card-item.active {
+  background: linear-gradient(135deg, #ff6b6b, #f97316);
+  color: #fff;
+}
+
+.modal {
+  background: rgba(47, 36, 58, 0.38);
+  backdrop-filter: blur(10px);
+}
+
+.toast {
+  background: rgba(47, 36, 58, 0.9);
+}
+
+.round-end-overlay {
+  background: rgba(47, 36, 58, 0.82);
+  backdrop-filter: blur(10px);
 }

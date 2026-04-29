@@ -1,4 +1,9 @@
 const { v4: uuidv4 } = require('uuid');
+const {
+  attachSocketToPlayer,
+  schedulePlayerRemoval,
+  rejoinPlayer
+} = require('./reconnect');
 
 // 存储房间数据
 const rooms = new Map();
@@ -173,8 +178,7 @@ function initSocket(io) {
       room.players.push(player);
       rooms.set(roomId, room);
       
-      socket.join(roomId);
-      socket.roomId = roomId;
+      attachSocketToPlayer(socket, roomId, player);
       
       socket.emit('roomCreated', {
         roomId,
@@ -201,6 +205,7 @@ function initSocket(io) {
       
       const existingPlayer = room.players.find(p => p.id === socket.id);
       if (existingPlayer) {
+        attachSocketToPlayer(socket, room.id, existingPlayer);
         socket.emit('roomJoined', {
           roomId: room.id,
           player: { id: existingPlayer.id, name: existingPlayer.name, isHost: existingPlayer.isHost, handCount: existingPlayer.hand.length, handCards: existingPlayer.hand },
@@ -217,8 +222,7 @@ function initSocket(io) {
       };
       
       room.players.push(player);
-      socket.join(roomId.toUpperCase());
-      socket.roomId = roomId.toUpperCase();
+      attachSocketToPlayer(socket, room.id, player);
       
       socket.emit('roomJoined', {
         roomId: room.id,
@@ -236,6 +240,28 @@ function initSocket(io) {
       });
       
       console.log(`[抽牌喝酒] ${playerName} 加入房间 ${roomId}`);
+    });
+
+    socket.on('rejoinRoom', ({ roomId, playerId, playerName }) => {
+      const result = rejoinPlayer({
+        socket,
+        rooms,
+        roomId,
+        playerId,
+        playerName,
+        getRoomState
+      });
+
+      if (!result) return;
+      const { room, player } = result;
+      room.players.forEach(p => {
+        if (p.id !== player.id) {
+          io.to(p.id).emit('playerRejoined', {
+            player: { id: player.id, name: player.name, isHost: player.isHost },
+            room: getRoomState(room, p.id)
+          });
+        }
+      });
     });
     
     // 开始游戏
@@ -548,27 +574,35 @@ function initSocket(io) {
       if (playerIndex === -1) return;
       
       const player = room.players[playerIndex];
-      room.discardPile = room.discardPile.concat(player.hand);
-      room.players.splice(playerIndex, 1);
-      
-      if (player.isHost && room.players.length > 0) {
-        room.players[0].isHost = true;
-      }
-      
-      if (room.currentPlayerIndex >= room.players.length) {
-        room.currentPlayerIndex = 0;
-      }
-      
-      if (room.players.length === 0) {
-        rooms.delete(socket.roomId);
-        console.log(`[抽牌喝酒] 房间 ${socket.roomId} 已删除`);
-        return;
-      }
-      
-      room.players.forEach(p => {
-        io.to(p.id).emit('playerLeft', {
-          player: { id: player.id, name: player.name },
-          room: getRoomState(room, p.id)
+      schedulePlayerRemoval(player, () => {
+        const currentRoom = rooms.get(socket.roomId);
+        if (!currentRoom) return;
+
+        const currentPlayerIndex = currentRoom.players.findIndex(p => p.id === player.id);
+        if (currentPlayerIndex === -1) return;
+
+        currentRoom.discardPile = currentRoom.discardPile.concat(player.hand);
+        currentRoom.players.splice(currentPlayerIndex, 1);
+
+        if (player.isHost && currentRoom.players.length > 0) {
+          currentRoom.players[0].isHost = true;
+        }
+
+        if (currentRoom.currentPlayerIndex >= currentRoom.players.length) {
+          currentRoom.currentPlayerIndex = 0;
+        }
+
+        if (currentRoom.players.length === 0) {
+          rooms.delete(socket.roomId);
+          console.log(`[抽牌喝酒] 房间 ${socket.roomId} 已删除`);
+          return;
+        }
+
+        currentRoom.players.forEach(p => {
+          io.to(p.id).emit('playerLeft', {
+            player: { id: player.id, name: player.name },
+            room: getRoomState(currentRoom, p.id)
+          });
         });
       });
     });

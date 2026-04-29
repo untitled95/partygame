@@ -4,6 +4,12 @@ const rooms = new Map();
 // 从 JSON 文件加载词库
 const path = require('path');
 const fs = require('fs');
+const {
+  attachSocketToPlayer,
+  schedulePlayerRemoval,
+  replaceIdInArray,
+  rejoinPlayer
+} = require('./reconnect');
 
 let words = {};
 
@@ -164,8 +170,7 @@ function initSocket(io) {
       const room = createRoom(roomId, socket.id, playerName);
       
       rooms.set(roomId, room);
-      socket.join(roomId);
-      socket.roomId = roomId;
+      attachSocketToPlayer(socket, roomId, room.players[0]);
       
       socket.emit('roomCreated', {
         roomId,
@@ -197,6 +202,7 @@ function initSocket(io) {
       
       const existingPlayer = room.players.find(p => p.id === socket.id);
       if (existingPlayer) {
+        attachSocketToPlayer(socket, room.id, existingPlayer);
         socket.emit('roomJoined', {
           roomId: room.id,
           player: existingPlayer,
@@ -213,8 +219,7 @@ function initSocket(io) {
       };
       
       room.players.push(player);
-      socket.join(roomId.toUpperCase());
-      socket.roomId = roomId.toUpperCase();
+      attachSocketToPlayer(socket, room.id, player);
       
       socket.emit('roomJoined', {
         roomId: room.id,
@@ -228,6 +233,31 @@ function initSocket(io) {
       });
       
       console.log(`[你画我猜] ${playerName} 加入房间 ${roomId}`);
+    });
+
+    socket.on('rejoinRoom', ({ roomId, playerId, playerName }) => {
+      const result = rejoinPlayer({
+        socket,
+        rooms,
+        roomId,
+        playerId,
+        playerName,
+        getRoomState,
+        onPlayerIdChange: (room, oldId, newId) => {
+          replaceIdInArray(room.guessedPlayers, oldId, newId);
+        }
+      });
+
+      if (!result) return;
+      const { room, player } = result;
+      room.players.forEach(p => {
+        if (p.id !== player.id) {
+          namespace.to(p.id).emit('playerRejoined', {
+            player: { id: player.id, name: player.name, isHost: player.isHost },
+            room: getRoomState(room, p.id)
+          });
+        }
+      });
     });
     
     // 开始游戏
@@ -347,30 +377,38 @@ function initSocket(io) {
       if (playerIndex === -1) return;
       
       const player = room.players[playerIndex];
-      room.players.splice(playerIndex, 1);
-      
-      if (player.isHost && room.players.length > 0) {
-        room.players[0].isHost = true;
-      }
-      
-      if (room.players.length === 0) {
-        if (room.timer) clearInterval(room.timer);
-        rooms.delete(socket.roomId);
-        console.log(`[你画我猜] 房间 ${socket.roomId} 已删除`);
-        return;
-      }
-      
-      if (room.gameStarted && room.currentDrawerIndex === playerIndex) {
-        room.currentDrawerIndex = room.currentDrawerIndex % room.players.length;
-        nextRound(room, namespace);
-      } else if (room.currentDrawerIndex > playerIndex) {
-        room.currentDrawerIndex--;
-      }
-      
-      room.players.forEach(p => {
-        namespace.to(p.id).emit('playerLeft', {
-          player: { id: player.id, name: player.name },
-          room: getRoomState(room, p.id)
+      schedulePlayerRemoval(player, () => {
+        const currentRoom = rooms.get(socket.roomId);
+        if (!currentRoom) return;
+
+        const currentPlayerIndex = currentRoom.players.findIndex(p => p.id === player.id);
+        if (currentPlayerIndex === -1) return;
+
+        currentRoom.players.splice(currentPlayerIndex, 1);
+
+        if (player.isHost && currentRoom.players.length > 0) {
+          currentRoom.players[0].isHost = true;
+        }
+
+        if (currentRoom.players.length === 0) {
+          if (currentRoom.timer) clearInterval(currentRoom.timer);
+          rooms.delete(socket.roomId);
+          console.log(`[你画我猜] 房间 ${socket.roomId} 已删除`);
+          return;
+        }
+
+        if (currentRoom.gameStarted && currentRoom.currentDrawerIndex === currentPlayerIndex) {
+          currentRoom.currentDrawerIndex = currentRoom.currentDrawerIndex % currentRoom.players.length;
+          nextRound(currentRoom, namespace);
+        } else if (currentRoom.currentDrawerIndex > currentPlayerIndex) {
+          currentRoom.currentDrawerIndex--;
+        }
+
+        currentRoom.players.forEach(p => {
+          namespace.to(p.id).emit('playerLeft', {
+            player: { id: player.id, name: player.name },
+            room: getRoomState(currentRoom, p.id)
+          });
         });
       });
     });

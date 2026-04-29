@@ -1,0 +1,140 @@
+.solo-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.solo-stat {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(101, 76, 125, 0.10);
+}
+
+.solo-stat .label {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.solo-stat .value {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.solo-card {
+  width: min(520px, 100%);
+  margin: 0 auto;
+}
+
+.board-2048 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(101, 76, 125, 0.13);
+  touch-action: none;
+}
+
+.tile-2048 {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.08);
+  color: var(--text-color);
+  font-size: clamp(1.4rem, 7vw, 2.4rem);
+  font-weight: 900;
+}
+
+.tile-2048.v2 { background: #eee4da; color: #776e65; }
+.tile-2048.v4 { background: #ede0c8; color: #776e65; }
+.tile-2048.v8 { background: #f2b179; }
+.tile-2048.v16 { background: #f59563; }
+.tile-2048.v32 { background: #f67c5f; }
+.tile-2048.v64 { background: #f65e3b; }
+.tile-2048.v128 { background: #edcf72; font-size: clamp(1.1rem, 6vw, 2rem); }
+.tile-2048.v256 { background: #edcc61; font-size: clamp(1.1rem, 6vw, 2rem); }
+.tile-2048.v512 { background: #edc850; font-size: clamp(1.1rem, 6vw, 2rem); }
+.tile-2048.v1024 { background: #edc53f; font-size: clamp(0.9rem, 5vw, 1.7rem); }
+.tile-2048.v2048 { background: #edc22e; font-size: clamp(0.9rem, 5vw, 1.7rem); }
+.tile-2048.v4096,
+.tile-2048.v8192 { background: #3c3a32; font-size: clamp(0.9rem, 5vw, 1.7rem); }
+
+.memory-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.memory-card {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #3498db, #8e44ad);
+  color: #fff;
+  font-size: clamp(1.7rem, 8vw, 2.8rem);
+  cursor: pointer;
+  transition: transform 0.18s, background 0.18s;
+}
+
+.memory-card:hover {
+  transform: translateY(-2px);
+}
+
+.memory-card.revealed,
+.memory-card.matched {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.memory-card.matched {
+  opacity: 0.65;
+}
+
+.reaction-zone {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  text-align: center;
+  padding: 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.18s, transform 0.18s;
+  box-shadow: 0 18px 45px rgba(101, 76, 125, 0.13);
+}
+
+.reaction-zone.waiting {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.reaction-zone.ready {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  transform: scale(1.01);
+}
+
+.reaction-zone.done {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.reaction-zone .zone-title {
+  display: block;
+  font-size: clamp(2rem, 9vw, 3.4rem);
+  font-weight: 900;
+}
+
+.reaction-zone .zone-desc {
+  display: block;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.82);
+}

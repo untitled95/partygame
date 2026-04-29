@@ -112,6 +112,30 @@ function showToast(message, duration = 3000) {
   }, duration);
 }
 
+function restoreRoomSession(data) {
+  currentPlayer = data.player;
+  currentRoom = data.room;
+  isHost = data.player.isHost;
+
+  roomIdDisplay.textContent = data.roomId;
+  updatePlayersList(data.room.players);
+  hostControls.classList.toggle('hidden', !isHost);
+  waitingMessage.classList.toggle('hidden', isHost);
+
+  if (data.room.gameStarted) {
+    enterGameScreen(data.room);
+  } else {
+    showScreen('lobby');
+  }
+
+  showToast('已恢复房间');
+}
+
+PartySession.setup('drinkinggame', socket, {
+  hasActiveSession: () => Boolean(currentPlayer && currentRoom),
+  onRejoined: restoreRoomSession
+});
+
 // ==================== 自定义弹窗函数 ====================
 
 // 显示确认弹窗
@@ -609,6 +633,17 @@ socket.on('playerJoined', (data) => {
   showToast(`${data.player.name} 加入了房间`);
 });
 
+socket.on('playerRejoined', (data) => {
+  currentRoom = data.room;
+  updatePlayersList(data.room.players);
+  if (data.room.gameStarted) {
+    const currentPlayerObj = data.room.players[data.room.currentPlayerIndex];
+    updateGamePlayersList(data.room.players, currentPlayerObj?.id);
+    updateSpecialStatus(data.room);
+  }
+  showToast(`${data.player.name} 回到了房间`);
+});
+
 // 玩家离开
 socket.on('playerLeft', (data) => {
   currentRoom = data.room;
@@ -859,9 +894,10 @@ socket.on('disconnect', () => {
 socket.on('connect', () => {
   if (currentRoom && currentPlayer) {
     // 尝试重新加入房间
-    socket.emit('joinRoom', { 
-      roomId: currentRoom.id, 
-      playerName: currentPlayer.name 
+    socket.emit('rejoinRoom', {
+      roomId: currentRoom.id,
+      playerId: currentPlayer.id,
+      playerName: currentPlayer.name
     });
   }
 });

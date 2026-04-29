@@ -303,6 +303,33 @@ function generateHint(word) {
   return word.split('').map(() => '_').join(' ');
 }
 
+function restoreRoomSession(data) {
+  currentPlayer = data.player;
+  currentRoom = data.room;
+  isHost = data.player.isHost;
+
+  roomIdDisplay.textContent = data.roomId;
+  updatePlayersList(data.room.players);
+  hostControls.classList.toggle('hidden', !isHost);
+  waitingMessage.classList.toggle('hidden', isHost);
+
+  if (data.room.gameStarted) {
+    totalRoundsDisplay.textContent = data.room.maxRounds;
+    initCanvas();
+    updateRoundUI(data.room);
+    showScreen('game');
+  } else {
+    showScreen('lobby');
+  }
+
+  showToast('已恢复房间');
+}
+
+PartySession.setup('drawguess', socket, {
+  hasActiveSession: () => Boolean(currentPlayer && currentRoom),
+  onRejoined: restoreRoomSession
+});
+
 // ==================== 事件绑定 ====================
 
 // 创建房间
@@ -405,6 +432,13 @@ socket.on('playerJoined', (data) => {
   currentRoom = data.room;
   updatePlayersList(data.room.players);
   showToast(`${data.player.name} 加入了房间`);
+});
+
+socket.on('playerRejoined', (data) => {
+  currentRoom = data.room;
+  updatePlayersList(data.room.players);
+  if (data.room.gameStarted) updateScoresList(data.room.players);
+  showToast(`${data.player.name} 回到了房间`);
 });
 
 // 玩家离开

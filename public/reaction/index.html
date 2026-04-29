@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>⚡ 反应测速</title>
+  <link rel="stylesheet" href="/shared/party.css">
+  <link rel="stylesheet" href="/shared/solo.css">
+</head>
+<body>
+  <div class="screen active">
+    <div class="container solo-card">
+      <h1 class="title">⚡ 反应测速</h1>
+      <p class="subtitle">变绿后立刻点击，看看你的反应速度</p>
+
+      <div class="solo-stats">
+        <div class="solo-stat"><span class="label">本次</span><span id="last-time" class="value">-</span></div>
+        <div class="solo-stat"><span class="label">最佳</span><span id="best-time" class="value">-</span></div>
+        <div class="solo-stat"><span class="label">次数</span><span id="attempts" class="value">0</span></div>
+      </div>
+
+      <div id="reaction-zone" class="reaction-zone">
+        <span id="zone-title" class="zone-title">准备开始</span>
+        <span id="zone-desc" class="zone-desc">点击下方按钮开始测试</span>
+      </div>
+
+      <div class="actions">
+        <button id="start-btn" class="btn btn-primary">开始测试</button>
+        <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
+      </div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
