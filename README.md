@@ -8,7 +8,7 @@
 - 👥 多人实时在线房间
 - 🔗 房间号邀请好友加入
 - ⚡ Socket.IO 实时同步游戏状态
-- 🎮 10 个可玩的派对小游戏
+- 🎮 13 个可玩的派对小游戏
 - 🧩 单人小游戏无需创建房间，打开即可玩
 - 🐳 支持 Docker / PM2 部署
 
@@ -26,6 +26,9 @@
 | `/solo2048/` | 🧩 2048 | 单人滑动合并数字，挑战高分 |
 | `/memory/` | 🧠 记忆翻牌 | 单人翻牌配对，统计步数和用时 |
 | `/reaction/` | ⚡ 反应测速 | 单人反应速度测试，记录最佳成绩 |
+| `/snake/` | 🐍 贪吃蛇 | 单人方向控制，吃果子得分并逐步加速 |
+| `/minesweeper/` | 💣 扫雷 | 单人九宫格扫雷，支持首次安全点击和插旗模式 |
+| `/tictactoe/` | ⭕ 井字棋 | 单人对战电脑，自动记录胜负和平局 |
 
 ## 🚀 快速开始
 
@@ -83,7 +86,10 @@ partygame/
 │   ├── guessnumber/
 │   ├── solo2048/
 │   ├── memory/
-│   └── reaction/
+│   ├── reaction/
+│   ├── snake/
+│   ├── minesweeper/
+│   └── tictactoe/
 ├── data/
 │   └── drawguess-words.json  # 你画我猜词库
 ├── ecosystem.config.js       # PM2 配置

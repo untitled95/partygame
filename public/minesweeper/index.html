@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>💣 扫雷</title>
+  <link rel="stylesheet" href="/shared/party.css">
+  <link rel="stylesheet" href="/shared/solo.css">
+</head>
+<body>
+  <div class="screen active">
+    <div class="container solo-card">
+      <h1 class="title">💣 扫雷</h1>
+      <p class="subtitle">根据数字推理地雷位置，第一次点击一定安全</p>
+
+      <div class="solo-stats">
+        <div class="solo-stat"><span class="label">剩余雷</span><span id="remaining-mines" class="value">10</span></div>
+        <div class="solo-stat"><span class="label">时间</span><span id="timer" class="value">0s</span></div>
+        <div class="solo-stat"><span class="label">状态</span><span id="status" class="value">准备</span></div>
+      </div>
+
+      <div id="minesweeper-board" class="minesweeper-board" aria-label="扫雷棋盘"></div>
+
+      <div class="actions">
+        <button id="new-game-btn" class="btn btn-primary">新游戏</button>
+        <button id="flag-mode-btn" class="btn btn-warning">插旗模式：关</button>
+        <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
+      </div>
+      <p id="message" class="muted">电脑右键插旗，手机可开启插旗模式。</p>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

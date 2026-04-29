@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>⭕ 井字棋</title>
+  <link rel="stylesheet" href="/shared/party.css">
+  <link rel="stylesheet" href="/shared/solo.css">
+</head>
+<body>
+  <div class="screen active">
+    <div class="container solo-card">
+      <h1 class="title">⭕ 井字棋</h1>
+      <p class="subtitle">你执 X，电脑执 O，率先三连线获胜</p>
+
+      <div class="solo-stats">
+        <div class="solo-stat"><span class="label">你</span><span id="player-score" class="value">0</span></div>
+        <div class="solo-stat"><span class="label">电脑</span><span id="computer-score" class="value">0</span></div>
+        <div class="solo-stat"><span class="label">平局</span><span id="draw-score" class="value">0</span></div>
+      </div>
+
+      <div id="tictactoe-board" class="tictactoe-board" aria-label="井字棋棋盘"></div>
+
+      <div class="actions">
+        <button id="new-round-btn" class="btn btn-primary">新一局</button>
+        <button id="reset-score-btn" class="btn btn-warning">清空比分</button>
+        <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
+      </div>
+      <p id="message" class="muted">轮到你了，点击任意空格落子。</p>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
