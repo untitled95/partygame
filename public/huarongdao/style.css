@@ -1,0 +1,123 @@
+.huarongdao-board {
+  background-size: auto, auto, 25% 20%, 25% 20%, auto;
+}
+
+.huarongdao-piece {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: clamp(3px, 1.2vw, 8px);
+  gap: clamp(1px, 0.45vw, 4px);
+  border-width: 2px;
+  border-radius: clamp(12px, 3vw, 18px);
+  line-height: 1;
+}
+
+.huarongdao-piece .cat-face,
+.huarongdao-piece .cat-meme-name,
+.huarongdao-piece .cat-caption {
+  flex: 0 0 auto;
+  max-width: 100%;
+  line-height: 1;
+}
+
+.huarongdao-piece .cat-face {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.huarongdao-piece .cat-meme-name,
+.huarongdao-piece .cat-caption {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.huarongdao-piece .cat-meme-name {
+  padding: 2px 6px;
+}
+
+.huarongdao-piece.cao {
+  gap: 4px;
+}
+
+.huarongdao-piece.cao .cat-face {
+  font-size: clamp(2.35rem, 13vw, 4.7rem);
+}
+
+.huarongdao-piece.cao .cat-meme-name {
+  font-size: clamp(0.78rem, 3.8vw, 1.05rem);
+}
+
+.huarongdao-piece.cao .cat-caption {
+  font-size: clamp(0.68rem, 3vw, 0.9rem);
+}
+
+.huarongdao-piece.general .cat-face {
+  font-size: clamp(1.45rem, 6.8vw, 2.35rem);
+}
+
+.huarongdao-piece.general .cat-meme-name {
+  font-size: clamp(0.62rem, 2.6vw, 0.82rem);
+}
+
+.huarongdao-piece.general .cat-caption {
+  font-size: clamp(0.55rem, 2.2vw, 0.72rem);
+}
+
+.huarongdao-piece.horizontal {
+  flex-direction: row;
+  gap: clamp(4px, 1.4vw, 8px);
+  justify-content: center;
+  padding-inline: clamp(5px, 1.8vw, 10px);
+}
+
+.huarongdao-piece.horizontal .cat-face {
+  font-size: clamp(1.45rem, 6vw, 2.25rem);
+}
+
+.huarongdao-piece.horizontal .cat-meme-name {
+  font-size: clamp(0.58rem, 2.2vw, 0.78rem);
+}
+
+.huarongdao-piece.horizontal .cat-caption {
+  font-size: clamp(0.52rem, 1.9vw, 0.68rem);
+}
+
+.huarongdao-piece.soldier {
+  gap: 1px;
+  padding: 3px;
+  border-radius: clamp(10px, 2.4vw, 14px);
+}
+
+.huarongdao-piece.soldier .cat-face {
+  font-size: clamp(1.05rem, 5.7vw, 1.8rem);
+}
+
+.huarongdao-piece.soldier .cat-meme-name {
+  padding: 1px 4px;
+  font-size: clamp(0.5rem, 2vw, 0.66rem);
+}
+
+.huarongdao-piece.soldier .cat-caption {
+  display: none;
+}
+
+@media (max-width: 430px) {
+  .huarongdao-piece.general .cat-caption,
+  .huarongdao-piece.horizontal .cat-caption {
+    display: none;
+  }
+
+  .huarongdao-piece.horizontal .cat-face {
+    font-size: clamp(1.35rem, 5.8vw, 1.9rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .huarongdao-piece.soldier .cat-meme-name {
+    display: none;
+  }
+
+  .huarongdao-piece.general .cat-meme-name {
+    font-size: 0.58rem;
+  }
+}

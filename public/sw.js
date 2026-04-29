@@ -1,4 +1,4 @@
-const CACHE_NAME = 'partygame-solo-offline-20260429-v1';
+const CACHE_NAME = 'partygame-solo-offline-20260429-v2';
 
 const SOLO_ROUTES = [
   '/solo2048/',
@@ -38,6 +38,7 @@ const PRECACHE_URLS = [
   '/tictactoe/game.js',
   '/huarongdao/',
   '/huarongdao/index.html',
+  '/huarongdao/style.css',
   '/huarongdao/game.js'
 ];
 
