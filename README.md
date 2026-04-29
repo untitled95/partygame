@@ -8,7 +8,7 @@
 - 👥 多人实时在线房间
 - 🔗 房间号邀请好友加入
 - ⚡ Socket.IO 实时同步游戏状态
-- 🎮 13 个可玩的派对小游戏
+- 🎮 14 个可玩的派对小游戏
 - 🧩 单人小游戏无需创建房间，打开即可玩
 - 🐳 支持 Docker / PM2 部署
 
@@ -29,6 +29,7 @@
 | `/snake/` | 🐍 贪吃蛇 | 单人方向控制，吃果子得分并逐步加速 |
 | `/minesweeper/` | 💣 扫雷 | 单人九宫格扫雷，支持首次安全点击和插旗模式 |
 | `/tictactoe/` | ⭕ 井字棋 | 单人对战电脑，自动记录胜负和平局 |
+| `/huarongdao/` | 🧱 华容道 | 单人经典横刀立马布局，移动棋子帮助曹操突围 |
 
 ## 🚀 快速开始
 
@@ -89,7 +90,8 @@ partygame/
 │   ├── reaction/
 │   ├── snake/
 │   ├── minesweeper/
-│   └── tictactoe/
+│   ├── tictactoe/
+│   └── huarongdao/
 ├── data/
 │   └── drawguess-words.json  # 你画我猜词库
 ├── ecosystem.config.js       # PM2 配置
