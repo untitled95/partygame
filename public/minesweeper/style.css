@@ -1,0 +1,16 @@
+.minesweeper-board {
+  grid-template-columns: repeat(var(--minesweeper-size, 9), minmax(0, 1fr));
+  gap: var(--mine-cell-gap, 4px);
+  width: 100%;
+  max-width: min(100%, var(--mine-board-max, 420px));
+  margin: 0 auto;
+}
+
+.mine-cell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border-radius: var(--mine-cell-radius, 9px);
+  font-size: var(--mine-cell-font-size, clamp(0.9rem, 4vw, 1.45rem));
+  line-height: 1;
+}

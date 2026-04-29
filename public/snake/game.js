@@ -84,7 +84,7 @@ function startGame() {
   nextDirection = 'right';
   score = 0;
   state = 'running';
-  messageEl.textContent = '不要撞墙，也不要撞到自己。';
+  messageEl.textContent = '电脑用方向键/WASD，手机在棋盘上滑动。不要撞墙，也不要撞到自己。';
   pauseBtn.textContent = '暂停';
   placeFood();
   render();
@@ -192,10 +192,6 @@ document.addEventListener('keydown', (event) => {
   if (!next) return;
   event.preventDefault();
   setDirection(next);
-});
-
-document.querySelectorAll('[data-direction]').forEach(button => {
-  button.addEventListener('click', () => setDirection(button.dataset.direction));
 });
 
 boardEl.addEventListener('touchstart', (event) => {

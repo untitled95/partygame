@@ -176,7 +176,7 @@ function resetGame() {
   moves = 0;
   won = false;
   history = [];
-  messageEl.textContent = '先点选一只猫，再用方向按钮、键盘方向键或滑动猫猫移动。';
+  messageEl.textContent = '先点选一只猫，电脑用方向键/WASD，手机直接滑动猫猫移动。';
   render();
 }
 
@@ -234,10 +234,6 @@ boardEl.addEventListener('pointerup', (event) => {
 
 boardEl.addEventListener('pointercancel', () => {
   pointerStart = null;
-});
-
-document.querySelectorAll('[data-direction]').forEach(button => {
-  button.addEventListener('click', () => moveSelected(button.dataset.direction));
 });
 
 document.addEventListener('keydown', (event) => {

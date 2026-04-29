@@ -1,4 +1,4 @@
-const CACHE_NAME = 'partygame-solo-offline-20260429-v2';
+const CACHE_NAME = 'partygame-solo-offline-20260429-v4';
 
 const SOLO_ROUTES = [
   '/solo2048/',
@@ -18,6 +18,7 @@ const PRECACHE_URLS = [
   '/shared/party.css',
   '/shared/solo.css',
   '/shared/offline.js',
+  '/shared/offline-progress.js',
   '/solo2048/',
   '/solo2048/index.html',
   '/solo2048/game.js',
@@ -32,6 +33,8 @@ const PRECACHE_URLS = [
   '/snake/game.js',
   '/minesweeper/',
   '/minesweeper/index.html',
+  '/minesweeper/style.css',
+  '/minesweeper/levels.js',
   '/minesweeper/game.js',
   '/tictactoe/',
   '/tictactoe/index.html',
@@ -41,6 +44,19 @@ const PRECACHE_URLS = [
   '/huarongdao/style.css',
   '/huarongdao/game.js'
 ];
+
+async function broadcastProgress(message) {
+  const clients = await self.clients.matchAll({
+    includeUncontrolled: true,
+    type: 'window'
+  });
+  clients.forEach(client => {
+    client.postMessage({
+      source: 'partygame-sw',
+      ...message
+    });
+  });
+}
 
 function isSoloRoute(pathname) {
   const normalized = pathname.endsWith('/') ? pathname : `${pathname}/`;
@@ -95,9 +111,33 @@ async function navigationResponse(request, url) {
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const total = PRECACHE_URLS.length;
+      await broadcastProgress({ type: 'offline-cache-start', total });
+
+      for (let index = 0; index < PRECACHE_URLS.length; index++) {
+        const url = PRECACHE_URLS[index];
+        await cache.add(url);
+        const completed = index + 1;
+        await broadcastProgress({
+          type: 'offline-cache-progress',
+          url,
+          completed,
+          total,
+          percent: Math.round((completed / total) * 100)
+        });
+      }
+
+      await broadcastProgress({ type: 'offline-cache-complete', total });
+      await self.skipWaiting();
+    })().catch(async error => {
+      await broadcastProgress({
+        type: 'offline-cache-error',
+        message: error.message
+      });
+      throw error;
+    })
   );
 });
 

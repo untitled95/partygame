@@ -8,17 +8,28 @@
   <title>💣 扫雷</title>
   <link rel="stylesheet" href="/shared/party.css?v=solo-offline-20260429">
   <link rel="stylesheet" href="/shared/solo.css?v=solo-offline-20260429">
+  <link rel="stylesheet" href="/minesweeper/style.css?v=minesweeper-levels-20260429">
 </head>
 <body>
   <div class="screen active">
     <div class="container solo-card">
       <h1 class="title">💣 扫雷</h1>
-      <p class="subtitle">根据数字推理地雷位置，第一次点击一定安全</p>
+      <p class="subtitle">选择难度，根据数字推理地雷位置，第一次点击一定安全</p>
 
       <div class="solo-stats">
+        <div class="solo-stat"><span class="label">难度</span><span id="difficulty-label" class="value">标准</span></div>
         <div class="solo-stat"><span class="label">剩余雷</span><span id="remaining-mines" class="value">10</span></div>
         <div class="solo-stat"><span class="label">时间</span><span id="timer" class="value">0s</span></div>
         <div class="solo-stat"><span class="label">状态</span><span id="status" class="value">准备</span></div>
+      </div>
+
+      <div class="input-group">
+        <select id="difficulty-select" aria-label="选择扫雷难度">
+          <option value="beginner">入门：8 x 8，8 雷</option>
+          <option value="classic">标准：9 x 9，10 雷</option>
+          <option value="advanced">进阶：12 x 12，24 雷</option>
+          <option value="expert">专家：16 x 16，40 雷</option>
+        </select>
       </div>
 
       <div id="minesweeper-board" class="minesweeper-board" aria-label="扫雷棋盘"></div>
@@ -31,7 +42,7 @@
       <p id="message" class="muted">电脑右键插旗，手机可开启插旗模式。</p>
     </div>
   </div>
-  <script src="/shared/offline.js?v=solo-offline-20260429"></script>
-  <script src="game.js?v=solo-offline-20260429"></script>
+  <script src="/shared/offline-progress.js?v=solo-progress-20260429"></script>
+  <script src="levels.js?v=minesweeper-levels-20260429"></script>
 </body>
 </html>

@@ -23,22 +23,15 @@
 
       <div id="snake-board" class="snake-board" aria-label="贪吃蛇棋盘"></div>
 
-      <div class="snake-controls" aria-label="移动控制">
-        <button class="btn btn-secondary control-btn up" data-direction="up" aria-label="向上">↑</button>
-        <button class="btn btn-secondary control-btn left" data-direction="left" aria-label="向左">←</button>
-        <button class="btn btn-secondary control-btn right" data-direction="right" aria-label="向右">→</button>
-        <button class="btn btn-secondary control-btn down" data-direction="down" aria-label="向下">↓</button>
-      </div>
-
       <div class="actions">
         <button id="new-game-btn" class="btn btn-primary">新游戏</button>
         <button id="pause-btn" class="btn btn-warning">暂停</button>
         <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
       </div>
-      <p id="message" class="muted">不要撞墙，也不要撞到自己。</p>
+      <p id="message" class="muted">电脑用方向键/WASD，手机在棋盘上滑动。不要撞墙，也不要撞到自己。</p>
     </div>
   </div>
-  <script src="/shared/offline.js?v=solo-offline-20260429"></script>
+  <script src="/shared/offline-progress.js?v=solo-progress-20260429"></script>
   <script src="game.js?v=solo-offline-20260429"></script>
 </body>
 </html>
