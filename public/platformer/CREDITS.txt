@@ -1,0 +1,11 @@
+Cat Journey / 猫咪远行
+
+The player uses /huarongdao/assets/cao.png, adapted from Suzana Assets' Cats Pack.
+Author source: https://suzana-assets.itch.io/cats-pack
+License: CC0 1.0 Universal.
+Original image, author README and adaptation details are retained in
+/huarongdao/assets/source/ and /huarongdao/assets/CREDITS.txt.
+
+Landscape, platforms, collectible stars, checkpoints, obstacles, level layouts,
+and gameplay implementation were created for this project. No commercial game
+characters, artwork, level maps, sounds, or external image services were used.

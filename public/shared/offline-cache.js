@@ -175,7 +175,7 @@
 
   window.addEventListener('load', () => {
     // Version the worker URL so a CDN cannot keep an older release alive.
-    navigator.serviceWorker.register('/sw.js?v=20261007-cats', { updateViaCache: 'none' })
+    navigator.serviceWorker.register('/sw.js?v=20261007-platformer', { updateViaCache: 'none' })
       .then(registration => {
         if (registration.installing) {
           setProgress({

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8f8f6" />
+    <title>猫咪远行 | 单人横版闯关</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/lobby/assets/cat.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/shared/party.css" />
+    <link rel="stylesheet" href="/shared/game-ui.css?v=20261007-3" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="/lobby/theme.js"></script>
+    <script src="/shared/game-ui.js?v=20261007-3" defer></script>
+  </head>
+  <body class="game-page" data-game="platformer">
+    <header class="play-header">
+      <a class="play-brand" href="/" aria-label="派对游戏合集首页"
+        ><img
+          src="/lobby/assets/game-controller.svg"
+          width="28"
+          height="28"
+          alt=""
+        /><span>派对游戏合集</span></a
+      >
+      <span class="play-breadcrumb">猫咪远行</span>
+      <div class="play-header-actions">
+        <a href="/">返回大厅</a
+        ><button id="play-theme" class="play-theme" aria-label="切换深色模式">
+          <img src="/lobby/assets/moon.svg" width="20" height="20" alt="" />
+        </button>
+      </div>
+    </header>
+    <main class="adventure">
+      <div class="adventure-heading">
+        <div>
+          <p class="game-kicker">单人横版闯关</p>
+          <h1>猫咪远行</h1>
+          <p id="level-description" class="muted">
+            第一次远行，从轻轻一跃开始。
+          </p>
+        </div>
+        <div class="journey-stats" aria-label="本关统计">
+          <div><span>星光</span><strong id="stars">0 / 12</strong></div>
+          <div><span>用时</span><strong id="time">00:00</strong></div>
+          <div><span>重试</span><strong id="deaths">0</strong></div>
+        </div>
+      </div>
+      <div class="journey-toolbar">
+        <div class="level-tabs" aria-label="选择关卡">
+          <button data-level="0" class="level-tab active" aria-pressed="true">
+            01 草甸</button
+          ><button
+            data-level="1"
+            class="level-tab"
+            aria-pressed="false"
+            disabled
+          >
+            02 石径</button
+          ><button
+            data-level="2"
+            class="level-tab"
+            aria-pressed="false"
+            disabled
+          >
+            03 云端
+          </button>
+        </div>
+        <button id="pause" class="quiet-button" disabled>暂停</button>
+      </div>
+      <div class="viewport" id="viewport">
+        <canvas
+          id="game"
+          tabindex="0"
+          aria-label="横版游戏画面。用左右方向键移动，空格或上方向键跳跃，Esc 暂停。"
+        ></canvas>
+        <div id="overlay" class="game-overlay">
+          <div class="overlay-content">
+            <p id="overlay-kicker">第 1 关 · 风起草甸</p>
+            <h2 id="overlay-title">出发，去找星光。</h2>
+            <p id="overlay-description">
+              跳过断崖，收集沿途星光。走到路的尽头，就能开启下一程。
+            </p>
+            <button id="primary-action" class="btn btn-primary">
+              开始远行
+            </button>
+          </div>
+        </div>
+        <div
+          id="checkpoint-notice"
+          class="checkpoint-notice"
+          aria-live="polite"
+        ></div>
+      </div>
+      <div class="touch-controls" aria-label="触屏操作">
+        <div class="direction-controls">
+          <button data-control="left" aria-label="向左移动">←</button
+          ><button data-control="right" aria-label="向右移动">→</button>
+        </div>
+        <button
+          class="jump-control"
+          data-control="jump"
+          aria-label="跳跃，长按跳得更高"
+        >
+          跳跃 <span>↑</span>
+        </button>
+      </div>
+      <div class="journey-footer">
+        <p>
+          <kbd>←</kbd><kbd>→</kbd> / A D 移动
+          <span class="hint-gap"><kbd>空格</kbd> / W 跳跃</span
+          ><span class="hint-gap">长按跳得更高</span>
+        </p>
+        <button id="restart" class="quiet-button">重玩本关</button>
+      </div>
+      <div class="journey-notes">
+        <p id="progress-note">到达终点解锁下一关。检查点会记住你的落脚处。</p>
+        <p id="best-note">星光可选收集，放心探索。</p>
+      </div>
+      <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
+    </main>
+    <script src="engine.js"></script>
+    <script src="game.js"></script>
+    <script src="/shared/offline-cache.js?v=20261007"></script>
+  </body>
+</html>
