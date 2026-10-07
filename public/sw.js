@@ -1,4 +1,4 @@
-const CACHE_NAME = 'partygame-solo-offline-20261007-v11';
+const CACHE_NAME = 'partygame-solo-offline-20261007-v12';
 
 const SOLO_ROUTES = [
   '/solo2048/',
@@ -51,7 +51,7 @@ const PRECACHE_URLS = [
   '/shared/game-ui.css',
   '/shared/game-ui.js',
   '/shared/offline.js',
-  '/shared/offline-progress.js',
+  '/shared/offline-cache.js',
   '/solo2048/',
   '/solo2048/index.html',
   '/solo2048/game.js',
@@ -115,7 +115,8 @@ function shouldHandleWithCache(url, request) {
 }
 
 async function matchCache(request) {
-  return caches.match(request, { ignoreSearch: true });
+  const cache = await caches.open(CACHE_NAME);
+  return cache.match(request, { ignoreSearch: true });
 }
 
 async function cacheFirst(request) {
@@ -147,9 +148,10 @@ async function navigationResponse(request, url) {
   } catch (error) {
     const cachedResponse = await matchCache(request);
     if (cachedResponse) return cachedResponse;
-    const normalizedResponse = await caches.match(getNavigationCacheKey(url), { ignoreSearch: true });
+    const cache = await caches.open(CACHE_NAME);
+    const normalizedResponse = await cache.match(getNavigationCacheKey(url), { ignoreSearch: true });
     if (normalizedResponse) return normalizedResponse;
-    return caches.match('/offline.html');
+    return cache.match('/offline.html');
   }
 }
 
@@ -162,7 +164,8 @@ self.addEventListener('install', event => {
 
       for (let index = 0; index < PRECACHE_URLS.length; index++) {
         const url = PRECACHE_URLS[index];
-        await cache.add(url);
+        // A new release must not precache the browser's previous HTTP responses.
+        await cache.add(new Request(url, { cache: 'reload' }));
         const completed = index + 1;
         await broadcastProgress({
           type: 'offline-cache-progress',

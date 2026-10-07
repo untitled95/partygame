@@ -174,7 +174,8 @@
   });
 
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    // Version the worker URL so a CDN cannot keep an older release alive.
+    navigator.serviceWorker.register('/sw.js?v=20261007-cats', { updateViaCache: 'none' })
       .then(registration => {
         if (registration.installing) {
           setProgress({
