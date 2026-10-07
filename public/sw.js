@@ -1,4 +1,4 @@
-const CACHE_NAME = 'partygame-solo-offline-20261007-v5';
+const CACHE_NAME = 'partygame-solo-offline-20261007-v11';
 
 const SOLO_ROUTES = [
   '/solo2048/',
@@ -48,6 +48,8 @@ const PRECACHE_URLS = [
   '/lobby/assets/x.svg',
   '/shared/party.css',
   '/shared/solo.css',
+  '/shared/game-ui.css',
+  '/shared/game-ui.js',
   '/shared/offline.js',
   '/shared/offline-progress.js',
   '/solo2048/',
@@ -73,7 +75,18 @@ const PRECACHE_URLS = [
   '/huarongdao/',
   '/huarongdao/index.html',
   '/huarongdao/style.css',
-  '/huarongdao/game.js'
+  '/huarongdao/cats.css',
+  '/huarongdao/game.js',
+  '/huarongdao/assets/zhangfei.png',
+  '/huarongdao/assets/cao.png',
+  '/huarongdao/assets/zhaoyun.png',
+  '/huarongdao/assets/machao.png',
+  '/huarongdao/assets/guanyu.png',
+  '/huarongdao/assets/huangzhong.png',
+  '/huarongdao/assets/soldier1.png',
+  '/huarongdao/assets/soldier2.png',
+  '/huarongdao/assets/soldier3.png',
+  '/huarongdao/assets/soldier4.png'
 ];
 
 async function broadcastProgress(message) {

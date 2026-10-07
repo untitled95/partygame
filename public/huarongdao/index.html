@@ -1,38 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#fff7ed">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <title>🐱 猫咪华容道</title>
-  <link rel="stylesheet" href="/shared/party.css?v=solo-offline-20260429">
-  <link rel="stylesheet" href="/shared/solo.css?v=solo-offline-20260429">
-  <link rel="stylesheet" href="/huarongdao/style.css?v=cat-layout-20260429">
-</head>
-<body>
-  <div class="screen active">
-    <div class="container solo-card">
-      <h1 class="title">🐱 猫咪华容道</h1>
-      <p class="subtitle">猫 meme 版横刀立马，移动猫猫让老板猫从底部出口突围</p>
-
-      <div class="solo-stats">
-        <div class="solo-stat"><span class="label">步数</span><span id="moves" class="value">0</span></div>
-        <div class="solo-stat"><span class="label">最佳</span><span id="best-moves" class="value">-</span></div>
-        <div class="solo-stat"><span class="label">状态</span><span id="status" class="value">进行中</span></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff7ed" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>猫咪华容道</title>
+    <link rel="stylesheet" href="/shared/party.css?v=solo-offline-20260429" />
+    <link rel="stylesheet" href="/shared/solo.css?v=solo-offline-20260429" />
+    <link rel="stylesheet" href="/huarongdao/style.css?v=cat-layout-20260429" />
+    <link rel="stylesheet" href="/shared/game-ui.css?v=20261007-3" />
+    <link rel="stylesheet" href="/huarongdao/cats.css?v=20261007" />
+    <link rel="icon" href="/lobby/assets/cat.svg" type="image/svg+xml" />
+    <script src="/lobby/theme.js"></script>
+    <script src="/shared/game-ui.js?v=20261007-3" defer></script>
+  </head>
+  <body class="game-page solo-page" data-game="huarongdao">
+    <header class="play-header">
+      <a class="play-brand" href="/" aria-label="派对游戏合集首页"
+        ><img
+          src="/lobby/assets/game-controller.svg"
+          alt=""
+          width="28"
+          height="28"
+        /><span>派对游戏合集</span></a
+      ><span class="play-breadcrumb">猫咪华容道</span>
+      <div class="play-header-actions">
+        <a href="/">返回大厅</a
+        ><button id="play-theme" class="play-theme" aria-label="切换深色模式">
+          <img src="/lobby/assets/moon.svg" alt="" width="20" height="20" />
+        </button>
       </div>
+    </header>
+    <div class="screen active">
+      <div class="container solo-card">
+        <aside class="solo-sidebar">
+          <span class="welcome-icon"
+            ><img src="/lobby/assets/cat.svg" alt="" width="40" height="40"
+          /></span>
+          <p class="game-kicker">单人小游戏</p>
+          <h1 class="title">猫咪华容道</h1>
+          <p class="subtitle">挪一挪，给老板猫让条路。</p>
+          <div class="solo-stats">
+            <div class="solo-stat">
+              <span class="label">步数</span
+              ><span id="moves" class="value">0</span>
+            </div>
+            <div class="solo-stat">
+              <span class="label">最佳</span
+              ><span id="best-moves" class="value">-</span>
+            </div>
+            <div class="solo-stat">
+              <span class="label">状态</span
+              ><span id="status" class="value">进行中</span>
+            </div>
+          </div>
 
-      <div id="huarongdao-board" class="huarongdao-board" aria-label="华容道棋盘"></div>
+          <div class="solo-guide">
+            <h2>玩法小贴士</h2>
+            <p>
+              移动猫咪腾出空间，帮助最大的老板猫到达底部出口。卡住时可以撤销一步，换个思路再试。
+            </p>
+            <span class="control-hint">选中猫咪后使用方向键 / 滑动</span>
+          </div>
+        </aside>
+        <div class="solo-stage">
+          <div
+            id="huarongdao-board"
+            class="huarongdao-board"
+            aria-label="华容道棋盘"
+          ></div>
 
-      <div class="actions">
-        <button id="reset-btn" class="btn btn-primary">重置</button>
-        <button id="undo-btn" class="btn btn-warning">撤销</button>
-        <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
+          <div class="actions">
+            <button id="reset-btn" class="btn btn-primary">重置</button>
+            <button id="undo-btn" class="btn btn-warning">撤销</button>
+            <a
+              href="/"
+              class="btn btn-secondary"
+              style="text-align: center; text-decoration: none"
+              >返回大厅</a
+            >
+          </div>
+          <p id="message" class="muted">
+            先点选一只猫，电脑用方向键/WASD，手机直接滑动猫猫移动。
+          </p>
+        </div>
       </div>
-      <p id="message" class="muted">先点选一只猫，电脑用方向键/WASD，手机直接滑动猫猫移动。</p>
     </div>
-  </div>
-  <script src="/shared/offline-progress.js?v=solo-progress-20260429"></script>
-  <script src="game.js?v=solo-offline-20260429"></script>
-</body>
+    <script src="/shared/offline-progress.js?v=solo-progress-20260429"></script>
+    <script src="game.js?v=cc0-cats-20261007"></script>
+  </body>
 </html>

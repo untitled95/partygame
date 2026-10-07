@@ -9,16 +9,16 @@ const resetBtn = document.getElementById('reset-btn');
 const undoBtn = document.getElementById('undo-btn');
 
 const initialPieces = [
-  { id: 'zhangfei', name: '张飞', meme: '震惊猫', face: '🙀', caption: '啊?', type: 'general', row: 0, col: 0, width: 1, height: 2 },
-  { id: 'cao', name: '曹操', meme: '老板猫', face: '😼', caption: '让我出去', type: 'cao', row: 0, col: 1, width: 2, height: 2 },
-  { id: 'zhaoyun', name: '赵云', meme: '优雅猫', face: '😺', caption: '懂了', type: 'general', row: 0, col: 3, width: 1, height: 2 },
-  { id: 'machao', name: '马超', meme: '困困猫', face: '😿', caption: '想睡', type: 'general', row: 2, col: 0, width: 1, height: 2 },
-  { id: 'guanyu', name: '关羽', meme: '躺平猫', face: '😸', caption: '先躺会', type: 'horizontal', row: 2, col: 1, width: 2, height: 1 },
-  { id: 'huangzhong', name: '黄忠', meme: '干饭猫', face: '😹', caption: '开饭!', type: 'general', row: 2, col: 3, width: 1, height: 2 },
-  { id: 'soldier1', name: '兵', meme: '盯盯猫', face: '🐱', caption: '盯', type: 'soldier', row: 3, col: 1, width: 1, height: 1 },
-  { id: 'soldier2', name: '兵', meme: '摸鱼猫', face: '🐈', caption: '摸鱼', type: 'soldier', row: 3, col: 2, width: 1, height: 1 },
-  { id: 'soldier3', name: '兵', meme: '加班猫', face: '🐈‍⬛', caption: '救命', type: 'soldier', row: 4, col: 0, width: 1, height: 1 },
-  { id: 'soldier4', name: '兵', meme: '吃瓜猫', face: '😽', caption: '吃瓜', type: 'soldier', row: 4, col: 3, width: 1, height: 1 }
+  { id: 'zhangfei', name: '张飞', meme: '震惊猫', caption: '啊?', type: 'general', row: 0, col: 0, width: 1, height: 2 },
+  { id: 'cao', name: '曹操', meme: '老板猫', caption: '让我出去', type: 'cao', row: 0, col: 1, width: 2, height: 2 },
+  { id: 'zhaoyun', name: '赵云', meme: '优雅猫', caption: '懂了', type: 'general', row: 0, col: 3, width: 1, height: 2 },
+  { id: 'machao', name: '马超', meme: '困困猫', caption: '想睡', type: 'general', row: 2, col: 0, width: 1, height: 2 },
+  { id: 'guanyu', name: '关羽', meme: '躺平猫', caption: '先躺会', type: 'horizontal', row: 2, col: 1, width: 2, height: 1 },
+  { id: 'huangzhong', name: '黄忠', meme: '干饭猫', caption: '开饭!', type: 'general', row: 2, col: 3, width: 1, height: 2 },
+  { id: 'soldier1', name: '兵', meme: '盯盯猫', caption: '盯', type: 'soldier', row: 3, col: 1, width: 1, height: 1 },
+  { id: 'soldier2', name: '兵', meme: '摸鱼猫', caption: '摸鱼', type: 'soldier', row: 3, col: 2, width: 1, height: 1 },
+  { id: 'soldier3', name: '兵', meme: '加班猫', caption: '救命', type: 'soldier', row: 4, col: 0, width: 1, height: 1 },
+  { id: 'soldier4', name: '兵', meme: '吃瓜猫', caption: '吃瓜', type: 'soldier', row: 4, col: 3, width: 1, height: 1 }
 ];
 
 const directions = {
@@ -125,8 +125,9 @@ function render() {
           data-id="${piece.id}"
           style="left: calc(${left}% + 4px); top: calc(${top}% + 4px); width: calc(${width}% - 8px); height: calc(${height}% - 8px);"
           aria-label="${piece.meme}，原棋子${piece.name}"
+          aria-pressed="${piece.id === selectedId}"
         >
-          <span class="cat-face">${piece.face}</span>
+          <img class="cat-portrait" src="/huarongdao/assets/${piece.id}.png" width="68" height="68" alt="" aria-hidden="true" draggable="false">
           <span class="cat-meme-name">${piece.meme}</span>
           <span class="cat-caption">${piece.caption}</span>
         </button>

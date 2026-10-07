@@ -1,48 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#fff7ed">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <title>💣 扫雷</title>
-  <link rel="stylesheet" href="/shared/party.css?v=solo-offline-20260429">
-  <link rel="stylesheet" href="/shared/solo.css?v=solo-offline-20260429">
-  <link rel="stylesheet" href="/minesweeper/style.css?v=minesweeper-levels-20260429">
-</head>
-<body>
-  <div class="screen active">
-    <div class="container solo-card">
-      <h1 class="title">💣 扫雷</h1>
-      <p class="subtitle">选择难度，根据数字推理地雷位置，第一次点击一定安全</p>
-
-      <div class="solo-stats">
-        <div class="solo-stat"><span class="label">难度</span><span id="difficulty-label" class="value">标准</span></div>
-        <div class="solo-stat"><span class="label">剩余雷</span><span id="remaining-mines" class="value">10</span></div>
-        <div class="solo-stat"><span class="label">时间</span><span id="timer" class="value">0s</span></div>
-        <div class="solo-stat"><span class="label">状态</span><span id="status" class="value">准备</span></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff7ed" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>扫雷</title>
+    <link rel="stylesheet" href="/shared/party.css?v=solo-offline-20260429" />
+    <link rel="stylesheet" href="/shared/solo.css?v=solo-offline-20260429" />
+    <link
+      rel="stylesheet"
+      href="/minesweeper/style.css?v=minesweeper-levels-20260429"
+    />
+    <link rel="stylesheet" href="/shared/game-ui.css?v=20261007-3" />
+    <link rel="icon" href="/lobby/assets/flag.svg" type="image/svg+xml" />
+    <script src="/lobby/theme.js"></script>
+    <script src="/shared/game-ui.js?v=20261007-3" defer></script>
+  </head>
+  <body class="game-page solo-page" data-game="minesweeper">
+    <header class="play-header">
+      <a class="play-brand" href="/" aria-label="派对游戏合集首页"
+        ><img
+          src="/lobby/assets/game-controller.svg"
+          alt=""
+          width="28"
+          height="28"
+        /><span>派对游戏合集</span></a
+      ><span class="play-breadcrumb">扫雷</span>
+      <div class="play-header-actions">
+        <a href="/">返回大厅</a
+        ><button id="play-theme" class="play-theme" aria-label="切换深色模式">
+          <img src="/lobby/assets/moon.svg" alt="" width="20" height="20" />
+        </button>
       </div>
+    </header>
+    <div class="screen active">
+      <div class="container solo-card">
+        <aside class="solo-sidebar">
+          <span class="welcome-icon"
+            ><img src="/lobby/assets/flag.svg" alt="" width="40" height="40"
+          /></span>
+          <p class="game-kicker">单人小游戏</p>
+          <h1 class="title">扫雷</h1>
+          <p class="subtitle">每一个数字，都是一条线索。</p>
+          <div class="solo-stats">
+            <div class="solo-stat">
+              <span class="label">难度</span
+              ><span id="difficulty-label" class="value">标准</span>
+            </div>
+            <div class="solo-stat">
+              <span class="label">剩余雷</span
+              ><span id="remaining-mines" class="value">10</span>
+            </div>
+            <div class="solo-stat">
+              <span class="label">时间</span
+              ><span id="timer" class="value">0s</span>
+            </div>
+            <div class="solo-stat">
+              <span class="label">状态</span
+              ><span id="status" class="value">准备</span>
+            </div>
+          </div>
 
-      <div class="input-group">
-        <select id="difficulty-select" aria-label="选择扫雷难度">
-          <option value="beginner">入门：8 x 8，8 雷</option>
-          <option value="classic">标准：9 x 9，10 雷</option>
-          <option value="advanced">进阶：12 x 12，24 雷</option>
-          <option value="expert">专家：16 x 16，40 雷</option>
-        </select>
+          <div class="input-group">
+            <select id="difficulty-select" aria-label="选择扫雷难度">
+              <option value="beginner">入门：8 x 8，8 雷</option>
+              <option value="classic">标准：9 x 9，10 雷</option>
+              <option value="advanced">进阶：12 x 12，24 雷</option>
+              <option value="expert">专家：16 x 16，40 雷</option>
+            </select>
+          </div>
+
+          <div class="solo-guide">
+            <h2>玩法小贴士</h2>
+            <p>
+              数字表示周围八格中的地雷数量。标记你确定的地雷，揭开所有安全格。第一次点击一定安全。
+            </p>
+            <span class="control-hint">右键插旗 / 手机插旗模式</span>
+          </div>
+        </aside>
+        <div class="solo-stage">
+          <div
+            id="minesweeper-board"
+            class="minesweeper-board"
+            aria-label="扫雷棋盘"
+          ></div>
+
+          <div class="actions">
+            <button id="new-game-btn" class="btn btn-primary">新游戏</button>
+            <button id="flag-mode-btn" class="btn btn-warning">
+              插旗模式：关
+            </button>
+            <a
+              href="/"
+              class="btn btn-secondary"
+              style="text-align: center; text-decoration: none"
+              >返回大厅</a
+            >
+          </div>
+          <p id="message" class="muted">电脑右键插旗，手机可开启插旗模式。</p>
+        </div>
       </div>
-
-      <div id="minesweeper-board" class="minesweeper-board" aria-label="扫雷棋盘"></div>
-
-      <div class="actions">
-        <button id="new-game-btn" class="btn btn-primary">新游戏</button>
-        <button id="flag-mode-btn" class="btn btn-warning">插旗模式：关</button>
-        <a href="/" class="btn btn-secondary" style="text-align:center;text-decoration:none;">返回大厅</a>
-      </div>
-      <p id="message" class="muted">电脑右键插旗，手机可开启插旗模式。</p>
     </div>
-  </div>
-  <script src="/shared/offline-progress.js?v=solo-progress-20260429"></script>
-  <script src="levels.js?v=minesweeper-levels-20260429"></script>
-</body>
+    <script src="/shared/offline-progress.js?v=solo-progress-20260429"></script>
+    <script src="levels.js?v=minesweeper-levels-20260429"></script>
+  </body>
 </html>

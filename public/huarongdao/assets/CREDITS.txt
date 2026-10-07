@@ -1,0 +1,41 @@
+Cat artwork for Cat Huarongdao
+
+Original asset: Cats Pack - 64x64 and 32x32
+Author: Suzana Assets
+Source: https://suzana-assets.itch.io/cats-pack
+License: Creative Commons Zero v1.0 Universal (CC0 1.0)
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Verified on: 2026-10-07
+
+The author's product page lists "Creative Commons Zero v1.0 Universal" under
+More information > Asset license. The page also states "No generative AI was used".
+Downloaded through the author's free itch.io download on 2026-10-07.
+No generative image service was used for these assets.
+
+Upstream files retained in source/:
+- cats-64x64.png: unmodified Cats_64x64.png from Cats_Pack.zip
+- README.txt: author README; line endings and trailing whitespace normalized
+
+Local adaptations:
+- Extracted the first 64x64 animation frame of each selected cat.
+- Cropped each frame to the same 34x34 transparent square at (19,15)-(53,49).
+- Softened the palette to fit the site; changed black outlines to brown-grey
+  and bright yellows/oranges to muted ginger. Lightened the dark cat for
+  readability in the dark theme. No geometry or character features added.
+- Exported optimized transparent PNGs. CSS uses nearest-neighbour scaling.
+
+Zero-based cat index in the upstream sheet (4 frames per cat):
+zhangfei.png: 0
+cao.png: 12
+zhaoyun.png: 8
+machao.png: 4
+guanyu.png: 7
+huangzhong.png: 14
+soldier1.png: 10
+soldier2.png: 11
+soldier3.png: 6
+soldier4.png: 2
+
+CC0 is a public-domain dedication with a fallback license, not a warranty
+that no other rights exist. The project does not claim authorship of the
+upstream artwork. Credit is retained voluntarily for provenance.

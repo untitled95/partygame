@@ -242,15 +242,36 @@ body {
 /* 游戏界面 */
 #game-screen {
   padding: 8px;
+}
+
+/* 仅在 active 时铺满视口；非 active 时由 .screen { display: none } 隐藏 */
+#game-screen.active {
   display: flex;
   flex-direction: column;
+  min-height: 0;
   height: 100vh;
   height: 100dvh; /* 动态视口高度，解决移动端地址栏问题 */
   overflow: hidden;
+  gap: 6px;
 }
 
-#game-screen.active {
+.game-body {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+}
+
+.game-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  gap: 6px;
+  position: relative; /* 锚定 .scores-fab */
 }
 
 .game-header {
@@ -260,7 +281,6 @@ body {
   padding: 8px 12px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  margin-bottom: 6px;
   flex-shrink: 0;
 }
 
@@ -312,8 +332,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0;
-  margin-bottom: 6px;
+  flex: 1;
+  min-height: 0;
 }
 
 #draw-canvas {
@@ -321,6 +341,9 @@ body {
   border-radius: 8px;
   touch-action: none;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* 画笔工具 - 紧凑版 */
@@ -328,7 +351,6 @@ body {
   padding: 8px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  margin-bottom: 6px;
   flex-shrink: 0;
 }
 
@@ -396,15 +418,15 @@ body {
   height: 4px;
 }
 
-/* 猜词区域 - 固定在底部 */
+/* 猜词区域 - 移动端在画板下方占固定高度，桌面端右侧两栏 */
 .guess-area {
-  flex: 1;
+  flex: 0 0 clamp(160px, 32dvh, 320px);
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   overflow: hidden;
-  min-height: 0; /* 关键：允许flex子元素收缩 */
+  min-height: 0;
 }
 
 .chat-messages {
@@ -460,11 +482,11 @@ body {
   opacity: 0.5;
 }
 
-/* 积分悬浮按钮 */
+/* 积分悬浮按钮（锚定在 .game-main 右上角） */
 .scores-fab {
-  position: fixed;
-  top: 60px;
-  right: 10px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -472,7 +494,7 @@ body {
   background: rgba(0,0,0,0.5);
   font-size: 1.2rem;
   cursor: pointer;
-  z-index: 50;
+  z-index: 10;
 }
 
 .chat-message.system {
@@ -830,4 +852,39 @@ body {
 
 .toast {
   background: rgba(47, 36, 58, 0.9);
+}
+
+/* ==================== 桌面端布局：画板与聊天分两栏 ==================== */
+@media (min-width: 768px) {
+  #game-screen.active {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .game-body {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .game-main {
+    flex: 1;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .guess-area {
+    flex: 0 0 320px;
+    min-height: 0;
+    align-self: stretch;
+  }
+
+  .chat-messages {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .guess-area {
+    flex: 0 0 360px;
+  }
 }

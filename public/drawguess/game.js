@@ -17,6 +17,9 @@ let lastY = 0;
 let currentColor = '#000000';
 let brushSize = 5;
 let isEraser = false;  // 橡皮擦模式
+let canvasInitialized = false;
+let canvasResizeObserver = null;
+let canvasResizeRaf = null;
 
 // DOM 元素
 const screens = {
@@ -84,47 +87,89 @@ function showToast(message, duration = 2000) {
   }, duration);
 }
 
-// 初始化画板
-function initCanvas() {
-  canvas = document.getElementById('draw-canvas');
-  ctx = canvas.getContext('2d');
-  
-  // 计算画布大小：根据屏幕剩余空间自适应
-  const screenHeight = window.innerHeight;
-  const headerHeight = 50;  // 顶部信息栏
-  const wordAreaHeight = 30; // 词语提示
-  const toolsHeight = isDrawer ? 70 : 0;  // 工具栏（画手才有）
-  const guessAreaHeight = 120; // 输入区域
-  const padding = 30;
-  
-  const availableHeight = screenHeight - headerHeight - wordAreaHeight - toolsHeight - guessAreaHeight - padding;
-  const containerWidth = canvas.parentElement.offsetWidth - 16;
-  
-  // 取较小值，确保画布是正方形且不超出屏幕
-  const size = Math.min(containerWidth, availableHeight, 320);
-  canvas.width = size;
-  canvas.height = size;
-  
-  // 设置白色背景
+// 计算画板像素尺寸（正方形，取容器宽高较小值）
+function computeCanvasSize() {
+  const container = canvas?.parentElement;
+  if (!container) return 0;
+  const rect = container.getBoundingClientRect();
+  return Math.floor(Math.min(rect.width, rect.height));
+}
+
+// 重新调整画板尺寸：保留当前画面（按比例缩放）
+function resizeCanvas() {
+  if (!canvas || !ctx) return;
+  const newSize = computeCanvasSize();
+  // 容器尚未完成布局或瞬时为 0，跳过以避免把画布塌缩成极小尺寸
+  if (newSize < 50) return;
+  if (newSize === canvas.width && newSize === canvas.height) return;
+
+  // 调整尺寸时若有正在进行的笔画，强制结束以避免 lastX/lastY 跨坐标空间产生跳线
+  isDrawing = false;
+
+  let snapshot = null;
+  if (canvas.width > 0 && canvas.height > 0) {
+    snapshot = document.createElement('canvas');
+    snapshot.width = canvas.width;
+    snapshot.height = canvas.height;
+    snapshot.getContext('2d').drawImage(canvas, 0, 0);
+  }
+
+  // 改变 canvas.width/height 会重置上下文状态，需要在之后重新设置
+  canvas.width = newSize;
+  canvas.height = newSize;
+
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // 画笔默认设置
+  ctx.fillRect(0, 0, newSize, newSize);
+  if (snapshot) {
+    ctx.drawImage(snapshot, 0, 0, newSize, newSize);
+  }
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.strokeStyle = currentColor;
+  ctx.strokeStyle = isEraser ? '#ffffff' : currentColor;
   ctx.lineWidth = brushSize;
-  
-  // 绑定事件
+}
+
+function scheduleCanvasResize() {
+  if (canvasResizeRaf) return;
+  canvasResizeRaf = requestAnimationFrame(() => {
+    canvasResizeRaf = null;
+    resizeCanvas();
+  });
+}
+
+// 初始化画板（幂等：事件和 ResizeObserver 只挂一次，再次调用仅触发一次重新测量）
+function initCanvas() {
+  if (!canvas) {
+    canvas = document.getElementById('draw-canvas');
+    ctx = canvas.getContext('2d');
+  }
+
+  resizeCanvas();
+
+  if (canvasInitialized) return;
+  canvasInitialized = true;
+
+  // 鼠标事件
   canvas.addEventListener('mousedown', startDrawing);
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', stopDrawing);
   canvas.addEventListener('mouseout', stopDrawing);
-  
+
   // 触摸事件
   canvas.addEventListener('touchstart', handleTouchStart);
   canvas.addEventListener('touchmove', handleTouchMove);
   canvas.addEventListener('touchend', stopDrawing);
+
+  // 监听容器尺寸变化（视口、工具栏切换、聊天面板调整等）
+  if (typeof ResizeObserver !== 'undefined') {
+    canvasResizeObserver = new ResizeObserver(scheduleCanvasResize);
+    canvasResizeObserver.observe(canvas.parentElement);
+  }
+  // 兜底：移动端虚拟键盘 / Safari 视口变化不一定触发 ResizeObserver
+  window.addEventListener('resize', scheduleCanvasResize);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', scheduleCanvasResize);
+  }
 }
 
 function getCanvasCoords(e) {
@@ -315,9 +360,9 @@ function restoreRoomSession(data) {
 
   if (data.room.gameStarted) {
     totalRoundsDisplay.textContent = data.room.maxRounds;
-    initCanvas();
-    updateRoundUI(data.room);
     showScreen('game');
+    updateRoundUI(data.room);
+    initCanvas();
   } else {
     showScreen('lobby');
   }
@@ -452,9 +497,9 @@ socket.on('playerLeft', (data) => {
 socket.on('gameStarted', (data) => {
   currentRoom = data.room;
   totalRoundsDisplay.textContent = data.room.maxRounds;
-  initCanvas();
-  updateRoundUI(data.room);
   showScreen('game');
+  updateRoundUI(data.room);
+  initCanvas();
 });
 
 // 新回合开始
