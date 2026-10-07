@@ -1,0 +1,15 @@
+Visual assets for the Party Games lobby
+
+Dice photograph: DS stories, "Red Dice on White Surface", Pexels.
+Source: https://www.pexels.com/photo/red-dice-on-white-surface-6990184/
+License: https://www.pexels.com/license/
+The local image is a cropped version of the licensed photograph.
+
+Icons: Phosphor Icons core 2.1.1, duotone set, MIT license.
+Source: https://github.com/phosphor-icons/core
+Vendored from the official npm package. Fill adapted to the local theme.
+See PHOSPHOR-LICENSE.
+
+Font: Outfit, vendored from @fontsource/outfit 5.3.0.
+Source: https://github.com/Outfitio/Outfit-Fonts
+See OUTFIT-LICENSE (SIL Open Font License).
