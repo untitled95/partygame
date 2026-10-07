@@ -30,9 +30,10 @@
     const hasActiveSession = options.hasActiveSession || (() => false);
 
     function tryRejoin() {
-      if (hasActiveSession()) return;
       const session = load(gameKey);
       if (!session?.roomId || !session?.playerId || !session?.playerName) return;
+      // 页面仍有房间状态，不代表新的 Socket 已加入服务器房间。
+      if (hasActiveSession() && session.playerId === socket.id) return;
       socket.emit('rejoinRoom', session);
     }
 
@@ -46,7 +47,7 @@
     socket.on('rejoinFailed', () => clear(gameKey));
     if (socket.connected) setTimeout(tryRejoin, 0);
 
-    return { load: () => load(gameKey), save: (roomId, player) => save(gameKey, roomId, player), clear, tryRejoin };
+    return { load: () => load(gameKey), save: (roomId, player) => save(gameKey, roomId, player), clear: () => clear(gameKey), tryRejoin };
   }
 
   window.PartySession = { setup, load, save, clear };

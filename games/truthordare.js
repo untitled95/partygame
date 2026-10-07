@@ -121,11 +121,10 @@ function handleDisconnect(socket, namespace) {
     return;
   }
 
-  if (room.currentPlayerIndex >= room.players.length) {
-    room.currentPlayerIndex = 0;
-  } else if (playerIndex < room.currentPlayerIndex) {
+  if (playerIndex < room.currentPlayerIndex) {
     room.currentPlayerIndex--;
   }
+  room.currentPlayerIndex %= room.players.length;
   if (room.currentPrompt && wasCurrentPlayer) {
     room.currentPrompt = null;
     room.phase = 'choosing';
@@ -164,11 +163,10 @@ function handleDisconnectWithGrace(socket, namespace) {
       return;
     }
 
-    if (currentRoom.currentPlayerIndex >= currentRoom.players.length) {
-      currentRoom.currentPlayerIndex = 0;
-    } else if (currentPlayerIndex < currentRoom.currentPlayerIndex) {
+    if (currentPlayerIndex < currentRoom.currentPlayerIndex) {
       currentRoom.currentPlayerIndex--;
     }
+    currentRoom.currentPlayerIndex %= currentRoom.players.length;
     if (currentRoom.currentPrompt && wasCurrentPlayer) {
       currentRoom.currentPrompt = null;
       currentRoom.phase = 'choosing';

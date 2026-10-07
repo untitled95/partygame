@@ -244,9 +244,12 @@ function initSocket(io) {
 
       if (!result) return;
       const { room, player } = result;
-      socket.to(room.id).emit('playerRejoined', {
-        player: { id: player.id, name: player.name, isHost: player.isHost },
-        room: getRoomState(room, player.id)
+      room.players.forEach(recipient => {
+        if (recipient.id === player.id) return;
+        namespace.to(recipient.id).emit('playerRejoined', {
+          player: { id: player.id, name: player.name, isHost: player.isHost },
+          room: getRoomState(room, recipient.id)
+        });
       });
     });
 

@@ -890,18 +890,6 @@ socket.on('disconnect', () => {
   });
 });
 
-// 重新连接
-socket.on('connect', () => {
-  if (currentRoom && currentPlayer) {
-    // 尝试重新加入房间
-    socket.emit('rejoinRoom', {
-      roomId: currentRoom.id,
-      playerId: currentPlayer.id,
-      playerName: currentPlayer.name
-    });
-  }
-});
-
 // 阻止双击缩放
 document.addEventListener('touchstart', (e) => {
   if (e.touches.length > 1) {

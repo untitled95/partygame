@@ -62,6 +62,7 @@ function createRoom(roomId, hostId, hostName) {
     guessedPlayers: [],
     drawingData: [],
     timer: null,
+    nextRoundTimer: null,
     createdAt: new Date()
   };
 }
@@ -92,9 +93,26 @@ function getRoomState(room, forPlayerId = null) {
   };
 }
 
+function clearRoundTimers(room) {
+  if (room.timer) clearInterval(room.timer);
+  if (room.nextRoundTimer) clearTimeout(room.nextRoundTimer);
+  room.timer = null;
+  room.nextRoundTimer = null;
+}
+
+function scheduleNextRound(room, io, delay) {
+  if (!room.gameStarted || room.nextRoundTimer) return;
+  if (room.timer) clearInterval(room.timer);
+  room.timer = null;
+  room.nextRoundTimer = setTimeout(() => {
+    room.nextRoundTimer = null;
+    nextRound(room, io);
+  }, delay);
+}
+
 // 启动回合计时器
 function startRoundTimer(room, io) {
-  if (room.timer) clearInterval(room.timer);
+  clearRoundTimers(room);
   
   room.timer = setInterval(() => {
     room.timeLeft--;
@@ -106,19 +124,23 @@ function startRoundTimer(room, io) {
         io.to(p.id).emit('timeUp', { word: room.currentWord, room: getRoomState(room, p.id) });
       });
       
-      setTimeout(() => nextRound(room, io), 3000);
+      scheduleNextRound(room, io, 3000);
     }
   }, 1000);
 }
 
 // 进入下一轮
-function nextRound(room, io) {
-  if (room.timer) clearInterval(room.timer);
-  
-  room.currentDrawerIndex = (room.currentDrawerIndex + 1) % room.players.length;
-  
-  if (room.currentDrawerIndex === 0) {
-    room.roundNumber++;
+function nextRound(room, io, advanceDrawer = true) {
+  clearRoundTimers(room);
+  if (!room.gameStarted || rooms.get(room.id) !== room) return;
+  if (room.players.length < 2) {
+    endGame(room, io);
+    return;
+  }
+
+  if (advanceDrawer) {
+    room.currentDrawerIndex = (room.currentDrawerIndex + 1) % room.players.length;
+    if (room.currentDrawerIndex === 0) room.roundNumber++;
   }
   
   if (room.roundNumber > room.maxRounds) {
@@ -144,11 +166,11 @@ function nextRound(room, io) {
 
 // 结束游戏
 function endGame(room, io) {
-  if (room.timer) clearInterval(room.timer);
+  clearRoundTimers(room);
   
   room.gameStarted = false;
   
-  const rankings = [...room.players].sort((a, b) => b.score - a.score);
+  const rankings = getRoomState(room).players.sort((a, b) => b.score - a.score);
   
   room.players.forEach(p => {
     io.to(p.id).emit('gameEnded', { rankings, room: getRoomState(room, p.id) });
@@ -263,7 +285,7 @@ function initSocket(io) {
     // 开始游戏
     socket.on('startGame', () => {
       const room = rooms.get(socket.roomId);
-      if (!room) return;
+      if (!room || room.gameStarted) return;
       
       const player = room.players.find(p => p.id === socket.id);
       if (!player || !player.isHost) {
@@ -299,7 +321,7 @@ function initSocket(io) {
     // 绘画数据
     socket.on('drawing', (data) => {
       const room = rooms.get(socket.roomId);
-      if (!room || !room.gameStarted) return;
+      if (!room || !room.gameStarted || room.nextRoundTimer) return;
       
       const currentDrawer = room.players[room.currentDrawerIndex];
       if (currentDrawer.id !== socket.id) return;
@@ -311,7 +333,7 @@ function initSocket(io) {
     // 清空画布
     socket.on('clearCanvas', () => {
       const room = rooms.get(socket.roomId);
-      if (!room || !room.gameStarted) return;
+      if (!room || !room.gameStarted || room.nextRoundTimer) return;
       
       const currentDrawer = room.players[room.currentDrawerIndex];
       if (currentDrawer.id !== socket.id) return;
@@ -323,7 +345,7 @@ function initSocket(io) {
     // 猜测
     socket.on('guess', (guessText) => {
       const room = rooms.get(socket.roomId);
-      if (!room || !room.gameStarted) return;
+      if (!room || !room.gameStarted || room.nextRoundTimer || typeof guessText !== 'string') return;
       
       const player = room.players.find(p => p.id === socket.id);
       if (!player) return;
@@ -355,7 +377,7 @@ function initSocket(io) {
         
         const nonDrawerCount = room.players.length - 1;
         if (room.guessedPlayers.length >= nonDrawerCount) {
-          setTimeout(() => nextRound(room, namespace), 2000);
+          scheduleNextRound(room, namespace, 2000);
         }
       } else {
         namespace.to(room.id).emit('chatMessage', {
@@ -385,23 +407,36 @@ function initSocket(io) {
         if (currentPlayerIndex === -1) return;
 
         currentRoom.players.splice(currentPlayerIndex, 1);
+        currentRoom.guessedPlayers = currentRoom.guessedPlayers.filter(id => id !== player.id);
 
         if (player.isHost && currentRoom.players.length > 0) {
           currentRoom.players[0].isHost = true;
         }
 
         if (currentRoom.players.length === 0) {
-          if (currentRoom.timer) clearInterval(currentRoom.timer);
+          clearRoundTimers(currentRoom);
           rooms.delete(socket.roomId);
           console.log(`[你画我猜] 房间 ${socket.roomId} 已删除`);
           return;
         }
 
         if (currentRoom.gameStarted && currentRoom.currentDrawerIndex === currentPlayerIndex) {
-          currentRoom.currentDrawerIndex = currentRoom.currentDrawerIndex % currentRoom.players.length;
-          nextRound(currentRoom, namespace);
+          // 删除当前画手后，下一个玩家已移动到同一索引，不再递增。
+          if (currentRoom.currentDrawerIndex >= currentRoom.players.length) {
+            currentRoom.currentDrawerIndex = 0;
+            currentRoom.roundNumber++;
+          }
+          nextRound(currentRoom, namespace, false);
         } else if (currentRoom.currentDrawerIndex > currentPlayerIndex) {
           currentRoom.currentDrawerIndex--;
+        }
+
+        if (currentRoom.gameStarted) {
+          if (currentRoom.players.length < 2) {
+            endGame(currentRoom, namespace);
+          } else if (currentRoom.guessedPlayers.length >= currentRoom.players.length - 1) {
+            scheduleNextRound(currentRoom, namespace, 2000);
+          }
         }
 
         currentRoom.players.forEach(p => {
